@@ -22,7 +22,7 @@ public class SecurityConfig {
 
     public SecurityConfig(JwtRequestFilter jwtRequestFilter, UserDetailsService jwtUserDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.jwtRequestFilter = jwtRequestFilter;
-        this.jwtUserDetailsService= jwtUserDetailsService;
+        this.jwtUserDetailsService = jwtUserDetailsService;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
@@ -33,19 +33,42 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.exceptionHandling((exception)-> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+        http.exceptionHandling((exception) -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         http.csrf(csrf -> csrf.disable())
+//                .authorizeRequests().requestMatchers("/api/auth/v1/login").permitAll()
+//                .requestMatchers("/api/auth/v1/register").permitAll()
+//                .requestMatchers("/api/password/**").permitAll()
+//                .requestMatchers("/api/users").permitAll()
+//                .requestMatchers("/api/user/**").permitAll()
+//                .requestMatchers("/api/**").fullyAuthenticated()
+//                .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/v1/login").permitAll() // Permit all requests to login endpoint
+                        .requestMatchers("/api/auth/v1/login","/api/auth/v1/logout","/api/auth/v1/status").permitAll() // Permit all requests to login endpoint
+                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/v1/codesets").authenticated() // Require authentication for all other /api/v1/** endpoints
                 ).authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/**").authenticated() // Require authentication for all other /api/v1/** endpoints
+                        .requestMatchers("/api/v1/codesets/*").authenticated() // Require authentication for all other /api/v1/** endpoints
+                ).authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/v1/codesets/*/versions/*").authenticated() // Require authentication for all other /api/v1/** endpoints
+                ).authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/v1/codesets/*/versions/*/commit").authenticated()
+                ).authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/v1/codesets/*/versions/*/exportCSV").authenticated()
+                ).authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/users", "/api/users/*").authenticated()
+                ).authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/api-keys", "/api/api-keys/*").authenticated()
+                )
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/**").permitAll() // Require authentication for all other /api/v1/** endpoints
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configure stateless session management
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter
-        return  http.build();
+        return http.build();
 
     }
 

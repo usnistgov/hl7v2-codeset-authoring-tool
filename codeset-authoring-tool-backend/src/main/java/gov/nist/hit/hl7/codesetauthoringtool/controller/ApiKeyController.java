@@ -1,7 +1,10 @@
 package gov.nist.hit.hl7.codesetauthoringtool.controller;
 
+import gov.nist.hit.hl7.codesetauthoringtool.dto.ApiKeyDTO;
 import gov.nist.hit.hl7.codesetauthoringtool.model.ApiKey;
+import gov.nist.hit.hl7.codesetauthoringtool.model.GeneratedApiKey;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.ApiKeyRequest;
+import gov.nist.hit.hl7.codesetauthoringtool.model.response.ResponseMessage;
 import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.ApiKeyServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/apikeys")
+@RequestMapping("/api/api-keys")
 public class ApiKeyController {
     public final ApiKeyServiceImpl apiKeyService;
 
@@ -22,23 +25,24 @@ public class ApiKeyController {
     this.apiKeyService = apiKeyService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<ApiKey>> getApiKeys() throws IOException {
-        List<ApiKey> apiKeys =  this.apiKeyService.getAllApiKeys();
+    @RequestMapping(value = "", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<List<ApiKeyDTO>> getApiKeys() throws IOException {
+        List<ApiKeyDTO> apiKeys =  this.apiKeyService.getAllApiKeys();
         return ResponseEntity.ok(apiKeys);
     }
 
-    @PostMapping("/")
-    public ResponseEntity<ApiKey> createApiKey(@Valid @RequestBody ApiKeyRequest request) throws IOException {
+    @RequestMapping(value = "", produces = "application/json", method = RequestMethod.POST)
+    public ResponseMessage<GeneratedApiKey> createApiKey(@Valid @RequestBody ApiKeyRequest request) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ApiKey apiKey = new ApiKey(
-                request.getValue(),
-                request.getLabel(),
-                request.getExpirationDate(),
-                authentication.getName()
-        );
-        ApiKey newApiKey = this.apiKeyService.createApiKey(apiKey);
-        return new ResponseEntity<>(newApiKey, HttpStatus.CREATED);
+        GeneratedApiKey newApiKey = this.apiKeyService.createApiKey(request, authentication.getName());
+//        return new ResponseEntity<>(newApiKey, HttpStatus.CREATED);
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Api Key created Successfully", newApiKey.getId(), null, newApiKey);
 
+    }
+
+    @RequestMapping(value = "/{id}", produces = "application/json", method = RequestMethod.DELETE)
+    public ResponseMessage<Void> deleteApiKey(@PathVariable String id) throws IOException {
+        this.apiKeyService.deleteApiKey(id);
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Api Key successfully deleted");
     }
 }

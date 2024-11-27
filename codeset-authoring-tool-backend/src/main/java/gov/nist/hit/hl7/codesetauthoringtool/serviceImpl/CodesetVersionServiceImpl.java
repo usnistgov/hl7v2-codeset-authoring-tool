@@ -38,7 +38,7 @@ public class CodesetVersionServiceImpl implements CodesetVersionService {
             throw new IllegalArgumentException("Codeset not found with ID: " + codesetId);
         }
         Codeset codeset = codesetOptional.get();
-        Optional<CodesetVersion> existingCodesetVersion = codesetVersionRepository.findByCodesetIdAndVersion(codeset.getId(),codesetVersionRequest.getVersion());
+        Optional<CodesetVersion> existingCodesetVersion = codesetVersionRepository.findByCodesetIdAndId(codeset.getId(),codesetVersionRequest.getVersion());
         if(existingCodesetVersion.isPresent()){
             throw new IllegalArgumentException("Version " + codesetVersionRequest.getVersion() + " already exists for this Codeset");
         }
@@ -51,14 +51,14 @@ public class CodesetVersionServiceImpl implements CodesetVersionService {
     }
 
     @Override
-    public CodesetVersion getVersionDetails(String codesetId, String version) {
+    public CodesetVersion getVersionDetails(String codesetId, String versionId) {
         Optional<Codeset> codesetOptional = codesetRepository.findById(codesetId);
         if (!codesetOptional.isPresent()) {
             throw new IllegalArgumentException("Codeset not found with ID: " + codesetId);
         }
-        Optional<CodesetVersion> codesetVersion = codesetVersionRepository.findByCodesetIdAndVersion(version);
+        Optional<CodesetVersion> codesetVersion = codesetVersionRepository.findByCodesetIdAndId(codesetId,versionId);
         if(!codesetVersion.isPresent()){
-            throw new IllegalArgumentException("Version " + version+ " doesn't exist for this Codeset");
+            throw new IllegalArgumentException("Version " + versionId+ " doesn't exist for this Codeset");
         }
         return  codesetVersion.get();
 

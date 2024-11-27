@@ -24,7 +24,6 @@ public class CodesetVersionController {
     private final CodesetVersionServiceImpl codesetVersionService;
 
     public CodesetVersionController(CodesetVersionServiceImpl codesetVersionService) {
-
         this.codesetVersionService = codesetVersionService;
     }
 
@@ -33,9 +32,9 @@ public class CodesetVersionController {
         CodesetVersion newCodesetVersion = this.codesetVersionService.addVersionToCodeset(id, request);
         return new ResponseEntity<>(newCodesetVersion, HttpStatus.CREATED);
     }
-    @GetMapping("/{id}/versions/{version}")
-    public ResponseEntity<List<Codeset>> getCodesets(@PathVariable String id, @PathVariable String version,) throws IOException {
-        CodesetVersion codesetVersion = this.codesetService
-        return new ResponseEntity<>(codesets, HttpStatus.OK);
-    }
+//    @GetMapping("/{id}/versions/{version}")
+//    public ResponseEntity<CodesetVersion> getCodesets(@PathVariable String id, @PathVariable String version) throws IOException {
+//        CodesetVersion codesetVersion = this.codesetVersionService.getVersionDetails(id, version);
+//        return new ResponseEntity<>(codesetVersion, HttpStatus.OK);
+//    }
 }

@@ -1,8 +1,12 @@
 package gov.nist.hit.hl7.codesetauthoringtool.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.stereotype.Indexed;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -13,21 +17,36 @@ public class ApiKey {
     private String id;
 
     @Column(unique = true)
-    private String value;
-    private String label;
-    private Date expirationDate;
-    private String createdBy;
+    private String token;
+    private String name;
+    private Date expireAt;
+    private Date createdAt;
 
-    // Standard constructors, getters, and setters below
+    private String username;
 
-    public ApiKey() {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "codeset_apikey",
+            joinColumns = @JoinColumn(name = "apikey_id"),
+            inverseJoinColumns = @JoinColumn(name = "codeset_id")
+    )
+    private Set<Codeset> codesets = new HashSet<>();
+    @JsonIgnore
+    public boolean isValid() {
+        return !isExpired();
+    }
+    @JsonIgnore
+    public boolean isExpired() {
+        if(expireAt != null) {
+            Date now = new Date();
+            return expireAt.before(now) || expireAt.equals(now);
+        } else {
+            return false;
+        }
     }
 
-    public ApiKey(String value, String label, Date expirationDate, String createdBy) {
-        this.value = value;
-        this.label = label;
-        this.expirationDate = expirationDate;
-        this.createdBy = createdBy;
+
+    public ApiKey() {
     }
 
     @PrePersist
@@ -44,35 +63,51 @@ public class ApiKey {
         this.id = id;
     }
 
-    public String getValue() {
-        return value;
+    public String getToken() {
+        return token;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getLabel() {
-        return label;
+    public String getName() {
+        return name;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Date getExpirationDate() {
-        return expirationDate;
+    public Date getExpireAt() {
+        return expireAt;
     }
 
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setExpireAt(Date expireAt) {
+        this.expireAt = expireAt;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Set<Codeset> getCodesets() {
+        return codesets;
+    }
+
+    public void setCodesets(Set<Codeset> codesets) {
+        this.codesets = codesets;
     }
 }

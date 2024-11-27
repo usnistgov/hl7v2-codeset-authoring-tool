@@ -2,6 +2,7 @@ package gov.nist.hit.hl7.codesetauthoringtool.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -18,13 +19,16 @@ public class CodesetVersion {
     private Boolean exposed;
     private Date dateCreated;
     private String status;
+    private Date dateCommitted;
+    private String comments;
 
-    @OneToMany(mappedBy = "codesetVersion")
-    @JsonBackReference
+    @OneToMany(mappedBy = "codesetVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Code> codes;
 
-    @ManyToOne
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "codeset_id")
+    @JsonIgnore()
     private Codeset codeset;
 
     public CodesetVersion(){
@@ -94,6 +98,22 @@ public class CodesetVersion {
 
     public void setCodeset(Codeset codeset) {
         this.codeset = codeset;
+    }
+
+    public Date getDateCommitted() {
+        return dateCommitted;
+    }
+
+    public void setDateCommitted(Date dateCommitted) {
+        this.dateCommitted = dateCommitted;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     @PrePersist

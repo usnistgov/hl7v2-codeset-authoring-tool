@@ -1,46 +1,52 @@
 package gov.nist.hit.hl7.codesetauthoringtool.model.request;
 
 
+import gov.nist.hit.hl7.codesetauthoringtool.model.Codeset;
+
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class ApiKeyRequest {
-    @NotNull(message = "value is required")
-    private String value;
-    private String label;
-    @NotNull(message = "expirationDate is required")
-    private Date expirationDate;
-
-
-    // Constructors, Getters, and Setters
+    Set<Codeset> codesets;
+    boolean expires;
+    int validityDays;
+    String name;
 
     public ApiKeyRequest() {
     }
 
-    public String getValue() {
-        return value;
+    public Set<Codeset> getCodesets() {
+        return codesets;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setCodesets(Set<Codeset> codesets) {
+        this.codesets = codesets;
     }
 
-    public String getLabel() {
-        return label;
+    public boolean isExpires() {
+        return expires;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setExpires(boolean expires) {
+        this.expires = expires;
     }
 
-    public Date getExpirationDate() {
-        return expirationDate;
+    public int getValidityDays() {
+        return validityDays;
     }
 
-    public void setExpirationDate(Date expirationDate) {
-        this.expirationDate = expirationDate;
+    public void setValidityDays(int validityDays) {
+        this.validityDays = validityDays;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }

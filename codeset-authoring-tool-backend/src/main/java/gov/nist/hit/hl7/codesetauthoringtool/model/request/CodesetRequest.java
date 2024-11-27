@@ -9,10 +9,9 @@ import java.util.List;
 
 public class CodesetRequest {
     private String name;
-    private String audience;
+    private String description;
     private String version;
     private Boolean exposed;
-
     private List<Code> codes;
 
     // Constructors, Getters, and Setters
@@ -20,9 +19,9 @@ public class CodesetRequest {
     public CodesetRequest() {
     }
 
-    public CodesetRequest(String name,String audience, String version, Boolean exposed, List<Code> codes) {
+    public CodesetRequest(String name, String description, String version, Boolean exposed, List<Code> codes) {
         this.name = name;
-        this.audience = audience;
+        this.description = description;
         this.version = version;
         this.exposed = exposed;
         this.codes = codes;
@@ -36,12 +35,12 @@ public class CodesetRequest {
         this.name = name;
     }
 
-    public String getAudience() {
-        return audience;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAudience(String audience) {
-        this.audience = audience;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getVersion() {

@@ -1,45 +1,70 @@
 package gov.nist.hit.hl7.codesetauthoringtool.controller;
 
+import gov.nist.hit.hl7.codesetauthoringtool.model.request.AuthUser;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.JwtRequest;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.JwtResponse;
-import gov.nist.hit.hl7.codesetauthoringtool.security.JwtTokenUtil;
+import gov.nist.hit.hl7.codesetauthoringtool.model.request.NewUserRequest;
+import gov.nist.hit.hl7.codesetauthoringtool.service.AuthService;
+import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.AuthServiceImpl;
 import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.UserDetailsServiceImpl;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/auth/v1")
 public class AuthController {
-    private final JwtTokenUtil jwtTokenUtil;
 
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
 
-    public AuthController(JwtTokenUtil jwtTokenUtil, UserDetailsServiceImpl userDetailsService, AuthenticationManager authenticationManager) {
-        this.jwtTokenUtil = jwtTokenUtil;
+    public AuthController( UserDetailsServiceImpl userDetailsService,
+                          AuthenticationManager authenticationManager, AuthServiceImpl authService) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
-    }
-    @GetMapping("/")
-    public String hello() {
-        return "Hello";
+        this.authService = authService;
     }
 
-    @RequestMapping(value = "/login" , produces = "application/json",
+    @RequestMapping(value = "/login", produces = "application/json",
             method = RequestMethod.POST)
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    public AuthUser login(@RequestBody JwtRequest authenticationRequest, HttpServletResponse response) throws Exception {
+        return authService.login(authenticationRequest, response);
+    }
 
 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+    @RequestMapping(value = "/logout", produces = "application/json",
+            method = RequestMethod.POST)
+    public void logout(HttpServletResponse response) throws Exception {
+        Cookie authCookie = new Cookie("codesetCookie", "");
+        authCookie.setPath("/api");
+        authCookie.setMaxAge(0);
+        response.addCookie(authCookie);
+    }
 
-            final String token = jwtTokenUtil.GenerateToken(userDetails.getUsername());
-            return ResponseEntity.ok(new JwtResponse(token));
-
+    @RequestMapping(value = "/status", produces = "application/json",
+            method = RequestMethod.GET)
+    public ResponseEntity<AuthUser> checkAuthStatus(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse response) throws Exception {
+        // Set the cookies and return the user
+        try {
+            return ResponseEntity.ok(new AuthUser(userDetails.getUsername(), true, new ArrayList<>()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Cookie authCookie = new Cookie("codesetCookie", "");
+            authCookie.setPath("/api");
+            authCookie.setMaxAge(0);
+            response.addCookie(authCookie);
+            response.sendError(403);
+            throw e;
+        }
 
     }
 

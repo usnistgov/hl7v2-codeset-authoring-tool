@@ -1,6 +1,7 @@
 package gov.nist.hit.hl7.codesetauthoringtool.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,21 +10,21 @@ public class ApplicationUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @Column(unique = true)
     private String username;
-
+    @JsonIgnore
     private String password; // Store securely (e.g., hashed with bcrypt)
     private String firstName;
     private String lastName;
     private String email;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

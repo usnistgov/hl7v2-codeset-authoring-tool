@@ -11,11 +11,16 @@ public class Code {
     @Id
     private String id;
     private String code;
+    private String description;
     private String system;
     private String display;
+    private String usage;
+    private String comments;
+    private String pattern;
+    private Boolean hasPattern;
 
-    @ManyToOne
-    @JoinColumn(name = "id", insertable=false, updatable=false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "codeset_version_id")
     @JsonBackReference
     private CodesetVersion codesetVersion;
 
@@ -41,6 +46,14 @@ public class Code {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getSystem() {
@@ -73,5 +86,37 @@ public class Code {
 
     public void setCodesetVersion(CodesetVersion codesetVersion) {
         this.codesetVersion = codesetVersion;
+    }
+
+    public String getUsage() {
+        return usage;
+    }
+
+    public void setUsage(String usage) {
+        this.usage = usage;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
+
+    public Boolean getHasPattern() {
+        return hasPattern;
+    }
+
+    public void setHasPattern(Boolean hasPattern) {
+        this.hasPattern = hasPattern;
     }
 }
