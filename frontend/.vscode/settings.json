@@ -1,0 +1,41 @@
+{
+    "editor.formatOnSave": true,
+    "prettier.singleQuote": true,
+    "prettier.bracketSpacing": true,
+    "editor.fontLigatures": true,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontSize": 13,
+    "editor.defaultFormatter": "vscode.typescript-language-features",
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontFamily": "Fira Code",
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#cd3e3a",
+        "activityBar.background": "#cd3e3a",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#134c15",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#cd3e3a",
+        "statusBar.background": "#a92e2b",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#cd3e3a",
+        "statusBarItem.remoteBackground": "#a92e2b",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#a92e2b",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#a92e2b99",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#a92e2b",
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+}

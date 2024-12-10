@@ -1,0 +1,78 @@
+<nav class="navbar toolbar sticky-top">
+  <div class="toolbar-name-container">
+    <img height="45px" src="nist_logo.png">
+    <a class="navbar-brand toolbar-name"> {{ title }}
+      <span class="toolname-abbrv">{{ abbrv && '(' + abbrv + ')' }} {{ version }}</span>
+    </a>
+  </div>
+  <nav class="nav-links-bar navbar">
+    @if (menuOptions && menuOptions.menu && menuOptions.menu.length > 0) {
+      <div class="inline-menu">
+        <ul class="navbar-nav">
+          <ng-container *ngTemplateOutlet="menuList; context: {
+            menu: menuOptions.menu,
+            activeMainMenuClass: menuOptions.activeMainMenuClass,
+            activeSubMenuClass: menuOptions.activeSubMenuClass
+          }"></ng-container>
+        </ul>
+        @if(menuOptions.accountMenu) {
+          <ul class="navbar-nav username-label">
+            @if(accountIsLoggedIn | async; as loggedIn) {
+              @if(menuOptions.accountMenu.loggedIn && menuOptions.accountMenu.loggedIn.length > 0) {
+                <li class="nav-item user-nav-item" ngbDropdown placement="bottom-start">
+                  <span class="nav-link" ngbDropdownToggle><fa-icon icon="user"></fa-icon> {{ accountUsername | async }} </span>
+                    <div ngbDropdownMenu>
+                      @for (subItem of menuOptions.accountMenu.loggedIn; track $index) {
+                        <button (click)="subItem.handler && subItem.handler(injector)" [queryParams]="subItem.queryParams" [routerLink]="!subItem.handler && subItem.routerLink ? [ subItem.routerLink ] : undefined" ngbDropdownItem [routerLinkActiveOptions]="pathMatchingOptions" [routerLinkActive]="subItem.activeClass || menuOptions.activeSubMenuClass">
+                          <fa-icon *ngIf="subItem.faIcon" [icon]="subItem.faIcon"></fa-icon> {{ subItem.label }}
+                        </button>
+                      }
+                    </div>
+                </li>
+              }
+              @else {
+                <li>
+                  <span class="nav-link"><fa-icon icon="user"></fa-icon> {{ accountUsername | async }} </span>
+                </li>
+              }
+            }
+            @else {
+              <ng-container *ngTemplateOutlet="menuList; context: {
+                menu: menuOptions.accountMenu.loggedOut,
+                activeMainMenuClass: menuOptions.activeMainMenuClass,
+                activeSubMenuClass: menuOptions.activeSubMenuClass
+              }"></ng-container>
+            }
+          </ul>
+        }
+      </div>
+    }
+  </nav>
+</nav>
+<div class="nav-progress-bar sticky-top">
+  <mat-progress-bar class="igamt-progress" mode="indeterminate"></mat-progress-bar>
+</div>
+
+<ng-template #menuList let-menu="menu" let-activeSubMenuClass="activeSubMenuClass" let-activeMainMenuClass="activeMainMenuClass" >
+  @for (item of menu; track $index) {
+    @if (!item.children || item.children.length === 0) {
+      <li class="nav-item" (click)="item.handler && item.handler(injector)" [queryParams]="item.queryParams" [routerLinkActiveOptions]="pathMatchingOptions" [routerLink]="!item.handler && item.routerLink ? [ item.routerLink ] : undefined" [routerLinkActive]="item.activeClass || activeMainMenuClass">
+        <span class="nav-item-content">
+          <fa-icon *ngIf="item.faIcon" [icon]="item.faIcon"></fa-icon> <a class="nav-link">{{ item.label }}</a>
+        </span>
+      </li>
+    }
+    @else {
+      <li [class]="'nav-item' + (isActiveClass(item.routerLink, item.activeClass || activeMainMenuClass) | async)" ngbDropdown>
+        <span class="nav-link" ngbDropdownToggle >{{ item.label }}</span>
+        <div ngbDropdownMenu>
+          @for (subItem of item.children; track $index) {
+            <button (click)="subItem.handler && subItem.handler(injector)" [queryParams]="subItem.queryParams" [routerLinkActiveOptions]="pathMatchingOptions" [routerLink]="!subItem.handler && subItem.routerLink ? [ subItem.routerLink ] : undefined" ngbDropdownItem [routerLinkActive]="subItem.activeClass || activeSubMenuClass">
+              <fa-icon *ngIf="subItem.faIcon" [icon]="subItem.faIcon"></fa-icon> {{ subItem.label }}
+            </button>
+          }
+        </div>
+      </li>
+    }
+  }
+</ng-template>

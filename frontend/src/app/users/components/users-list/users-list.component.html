@@ -1,0 +1,85 @@
+<div style="height: 100%; width: 100%; padding: 1rem; background-color: white; overflow: scroll;">
+  <div style="margin: auto;">
+    <div class="title">
+      <h2>Users</h2>
+      <button class="btn btn-sm btn-primary" (click)="createUser()"> <fa-icon icon="plus"></fa-icon>Create User
+      </button>
+    </div>
+
+    <div class="card">
+      <p-table #dt2 [value]="users$ | async" dataKey="id" [rows]="10" [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]" [paginator]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['username','firstName','lastName']" [tableStyle]="{'min-width':'75rem'}">
+        <ng-template pTemplate="caption">
+          <div class="flex">
+            <span class="p-input-icon-left ml-auto">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                placeholder="Search all" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width:25%">Username</th>
+            <th style="width:25%">First Name</th>
+            <th style="width:25%">Last Name</th>
+            <th style="width:25%">Actions</th>
+          </tr>
+          <tr>
+            <th>
+              <p-columnFilter type="text" field="username"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="firstName"></p-columnFilter>
+            </th>
+            <th>
+              <p-columnFilter type="text" field="lastName"></p-columnFilter>
+            </th>
+            <th>
+
+            </th>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+          <tr>
+            <td>
+              {{user.username}}
+            </td>
+            <td>
+              {{user.firstName}}
+            </td>
+            <td>
+              {{user.lastName}}
+            </td>
+            <td>
+              <button class="btn btn-success btn-sm" style="margin-right: 5px" type="button">
+                <fa-icon icon="pencil"></fa-icon> Edit
+              </button>
+              <button class="btn btn-danger btn-sm" style="margin-right: 5px" type="button" (click)="deleteUser(user)">
+                <fa-icon icon="trash-can"></fa-icon> Delete
+              </button>
+            </td>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">No users found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+
+  </div>
+</div>
+
+<p-confirmDialog #cd [style]="{width: '50vw'}" key="positionDialog" [baseZIndex]="10000">
+  <ng-template pTemplate="footer">
+    <button type="button" class="btn btn-sm btn-secondary mr-1" pButton label="Cancel" (click)="cd.reject()"></button>
+    <button type="button" class="btn btn-sm btn-danger" pButton label="Yes" (click)="cd.accept()"></button>
+
+  </ng-template>
+</p-confirmDialog>

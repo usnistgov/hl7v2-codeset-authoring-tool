@@ -56,7 +56,7 @@ public class CodesetServiceImpl implements CodesetService {
                 new ArrayList<>()
         );
         CodesetVersion newCodesetVersion = new CodesetVersion(
-                "1", codeset.getExposed(), new Date(), "unpublished", new ArrayList<>(), newCodeset
+                "", codeset.getExposed(), new Date(), "unpublished", new ArrayList<>(), newCodeset
         );
         if(codeset.getCodes() != null){
             for (Code code : codeset.getCodes()) {

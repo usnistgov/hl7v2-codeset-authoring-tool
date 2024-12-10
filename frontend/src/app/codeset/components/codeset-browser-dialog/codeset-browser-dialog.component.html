@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Select Code sets </h2>
+
+<mat-dialog-content class="mat-typography dialog-content">
+  <div style="padding-left: 20px;">
+    <div class="input-group" style="margin-bottom: 10px;">
+      <div class="input-group-prepend" style="height: 35px;">
+        <span class="input-group-text" id="inputGroupPrepend3">
+          <fa-icon icon="search"></fa-icon>
+        </span>
+
+      </div>
+      <input (input)="dt1.filterGlobal($event.target.value, 'contains')" class="form-control" id="filter"
+        placeholder="Search" required style="background-color: #fbfbfb; height: 35px;" type="text">
+    </div>
+    <p-table #dt1 [value]="codesets" [(selection)]="selectedCodesets" [metaKeySelection]="true" dataKey="id"
+      [globalFilterFields]="['name']">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th>Name</th>
+          <th>Date</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-codeset let-rowIndex="rowIndex">
+        <tr [pSelectableRow]="codeset" [pSelectableRowIndex]="rowIndex">
+          <td>
+            <p-tableCheckbox [value]="codeset"></p-tableCheckbox>
+          </td>
+          <td>{{codeset.name}}</td>
+          <td>{{codeset.date | date:'medium'}}</td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions style="justify-content: flex-end;">
+  <button mat-button [mat-dialog-close] class="btn btn-sm btn-secondary mr-1">Cancel</button>
+  <button color="accent" (click)="submit()" class="btn btn-sm btn-success">Done</button>
+</mat-dialog-actions>

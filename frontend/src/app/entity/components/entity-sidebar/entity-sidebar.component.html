@@ -1,0 +1,27 @@
+<div style="height: 100%; background-color: white;">
+  <div class="sb-section" style="padding: 2px;">
+    <dam-side-bar-toggle></dam-side-bar-toggle>
+  </div>
+  <div class="sb-section">
+    <div class="input-group">
+      <span class="input-group-text" style="border-radius: 0;" id="basic-addon1">
+        <fa-icon icon="filter"></fa-icon>
+      </span>
+      <input [ngModel]="filterText()" (ngModelChange)="filterText.set($event);" type="text" class="form-control" style="border-radius: 0; background-color: #fdfdfd; box-shadow: inset 1px 2px 8px rgb(0 0 0 / 9%);" aria-label="filter">
+    </div>
+  </div>
+  <ul class="list-group" style="height: 100%; overflow: scroll; background-color: #f8f8f8;">
+    @for (item of filteredSections(); track $index) {
+      <li class="list-group-item" [routerLink]="[item.type.toLowerCase(), item.id]" routerLinkActive="item-active">
+        @if (item.type === 'TEXT') {
+          <fa-icon icon="pencil" class="sb-icon"></fa-icon>
+        }
+        @else if(item.type === 'FORM'){
+          <fa-icon icon="list"  class="sb-icon"></fa-icon>
+        }
+        {{item.label}}
+      </li>
+    }
+  </ul>
+</div>
+

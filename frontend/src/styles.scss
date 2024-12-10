@@ -1,0 +1,79 @@
+@use '@angular/material' as mat;
+@include mat.core();
+@import './variables.scss';
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  @extend %blue-bg;
+  height: 100%;
+  width: 100%;
+  font-family: Verdana, Geneva, sans-serif !important;
+}
+
+ul {
+  margin-bottom: 0 !important;
+  padding-left: 0 !important;
+}
+
+router-outlet {
+  display: none;
+}
+
+input.ng-dirty.ng-invalid {
+  border-bottom: 3px solid red;
+  background-color: #fff6f7 !important;
+}
+
+input.ng-pristine.ng-invalid {
+  border-bottom: 2px solid rgb(248, 159, 159);
+}
+
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+
+.badge-dark {
+  color: #fff;
+  background-color: #343a40;
+}
+
+.badge-primary {
+  color: #fff;
+  background-color: #007bff;
+}
+
+.flex {
+  display: flex;
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border: 1px solid #c8c8c8 !important;
+}
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+
+}
+
+.form-group {
+  padding: 15px 0;
+}
+
+.mr-1 {
+  margin-right: 1rem;
+}

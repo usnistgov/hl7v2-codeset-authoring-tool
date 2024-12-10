@@ -1,0 +1,24 @@
+@import '../../../../variables.scss';
+
+.sb-icon {
+  margin-right: 10px;
+  color: blue;
+}
+
+
+.list-group-item:hover {
+  background-color: $nist_dark_yellow;
+  cursor: pointer;
+}
+
+.list-group {
+  border-radius: 0;
+}
+
+.item-active {
+  background-color: $nist_light_yellow
+}
+
+.sb-section {
+  border-bottom: 2px solid lightgray;
+}

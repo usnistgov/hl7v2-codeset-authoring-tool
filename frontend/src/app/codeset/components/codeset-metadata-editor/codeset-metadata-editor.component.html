@@ -1,0 +1,18 @@
+<ng-template #headerTitle >
+  <div style="display: flex; align-items: center; gap: 10px; margin-right: 10px;">
+    <div>{{ initialLabel }}</div>
+    <fa-icon icon="chevron-right"></fa-icon>
+    <div>{{metadata.title}}</div>
+  </div>
+</ng-template>
+
+<form [formGroup]="form">
+  <div class="mb-3">
+    <label for="label" class="form-label">Name</label>
+    <input type="text" class="form-control" id="label" placeholder="Name" formControlName="name">
+  </div>
+  <div class="mb-3">
+    <label for="value" class="form-label">Description</label>
+    <input type="text" class="form-control" id="description" placeholder="Description" formControlName="description">
+  </div>
+</form>

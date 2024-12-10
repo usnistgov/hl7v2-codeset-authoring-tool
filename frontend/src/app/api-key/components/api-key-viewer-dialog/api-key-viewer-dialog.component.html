@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>API Key</h2>
+
+<mat-dialog-content class="mat-typography dialog-content">
+  <div style="padding-left: 20px;">
+    <div class="alert alert-warning">
+      Please copy and secure this API key, you will not be able to retrieve it again.
+    </div>
+    <app-input-copy type="text" [value]="data.key.plainToken"></app-input-copy>
+
+
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions style="justify-content: flex-end;">
+  <button mat-button [mat-dialog-close] class="btn btn-sm btn-secondary">Close</button>
+</mat-dialog-actions>

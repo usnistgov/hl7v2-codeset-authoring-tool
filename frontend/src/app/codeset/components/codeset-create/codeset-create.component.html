@@ -1,0 +1,23 @@
+<div style="height: 100%; width: 100%; padding: 3rem; background-color: white; overflow: scroll;">
+  <div style="max-width: 800px; margin: auto;">
+    <div class="mb-3">
+      <dam-alerts-container></dam-alerts-container>
+    </div>
+    <h2 style="text-align: center;">Create Codeset</h2>
+    <form [formGroup]="form">
+      <div class="mb-3">
+        <label class="form-label" for="name">Name</label>
+        <input type="text" class="form-control" name="name" id="name" formControlName="name">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <input type="text" class="form-control" name="description" id="description" formControlName="description">
+      </div>
+    </form>
+    <div class="mb-3" style="display: flex; justify-content: flex-end; width: 100%;">
+      <button (click)="submit()" class="btn btn-primary">
+        Create
+      </button>
+    </div>
+  </div>
+</div>

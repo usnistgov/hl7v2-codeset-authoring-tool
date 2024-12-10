@@ -1,0 +1,79 @@
+<div style="height: 100%; background-color: white;">
+  <div class="sb-section" style="padding: 2px;">
+    <dam-side-bar-toggle></dam-side-bar-toggle>
+  </div>
+  <ul class="list-group editors">
+    <li class="list-group-item cursor-pointer" routerLink="dashboard" routerLinkActive="nav-active-link">
+      <i class="fa fa-home" style="font-size: larger; margin-right: 5px;"></i> Code Set Management
+    </li>
+    <li class="list-group-item" style="background-color: #f3f3f3; cursor: auto; border-top: 2px solid #ced4da;">
+      <i class="fa fa-code-fork" style="font-size: larger; margin-right: 5px;" aria-hidden="true"></i> Version History
+    </li>
+  </ul>
+  <div class="sb-section">
+    <div class="input-group">
+      <span class="input-group-text" style="border-radius: 0;" id="basic-addon1">
+        <fa-icon icon="filter"></fa-icon>
+      </span>
+      <input [ngModel]="filterText()" (ngModelChange)="filterText.set($event);" type="text" class="form-control"
+        style="border-radius: 0; background-color: #fdfdfd; box-shadow: inset 1px 2px 8px rgb(0 0 0 / 9%);"
+        aria-label="filter">
+    </div>
+  </div>
+  <div class="list">
+    <div *ngIf="codesetVersions$ | async as codeSetVersions" style="background-color: #f3f3f3; flex-grow: 1;">
+      <ul class="list-group">
+
+        <li style="padding: 0;" *ngFor="let codeSetVersion of codeSetVersions; let i = index"
+          routerLinkActive="nav-active-link" [routerLink]="['versions', codeSetVersion.id]"
+          class="list-group-item codeset-version-list-item cursor-pointer">
+
+          <div style="width: 100px; text-align: center;">
+            <span *ngIf="codeSetVersion.dateCommitted"
+              style="color: gray; font-size: 0.75em;">{{codeSetVersion.dateCommitted | date}}</span>
+            <span *ngIf="!codeSetVersion.dateCommitted" style="color: blue; font-size: 0.75em;">in progress</span>
+          </div>
+          <ng-container
+            *ngTemplateOutlet="versionIcon; context: { $implicit: i, single: codeSetVersions.length === 1, size: codeSetVersions.length }"></ng-container>
+          <div class="version-text" [ngStyle]="{color: !codeSetVersion.dateCommitted ? 'gray' : 'black'}">
+            v<span
+              [ngStyle]="{'font-weight': codeSetVersion.dateCommitted ? 'bold' : 'normal'}">{{codeSetVersion.version}}</span>
+            <span *ngIf="codeSetVersion.dateCommitted" style="margin-left: 10px; font-size: 0.80em; color: gray"
+              [ngbPopover]="codeSetVersion.comments" triggers="mouseenter:mouseleave" container="body"
+              placement="bottom">
+              {{codeSetVersion.comments}}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <ul class="list-group" style="height: 100%; overflow: scroll; background-color: #f8f8f8;">
+    @for (item of filteredSections(); track $index) {
+    <li class="list-group-item" [routerLink]="[item.type.toLowerCase(), item.id]" routerLinkActive="item-active">
+      @if (item.type === 'TEXT') {
+      <fa-icon icon="pencil" class="sb-icon"></fa-icon>
+      }
+      @else if(item.type === 'FORM'){
+      <fa-icon icon="list" class="sb-icon"></fa-icon>
+      }
+      {{item.label}}
+    </li>
+    }
+  </ul>
+</div>
+
+
+<ng-template #versionIcon let-i let-size="size" let-single="single" let-latest="latest">
+  <div class="version-icon">
+    <div class="version-line" [ngClass]="{
+      'version-line-single': single || i === 0 || size === 2,
+      'version-line-top': !single && i === 1,
+      'version-line-bottom': !single && i === (size - 1),
+      'version-line-middle': !single && i > 1 && i < (size - 1)
+    }"></div>
+    <div class="version-ball"
+      [ngClass]="{ 'version-committed': !single && i > 0 , 'version-inprogress': single || i === 0 }"></div>
+  </div>
+</ng-template>

@@ -1,0 +1,141 @@
+@import '../../../../variables.scss';
+
+:host {
+  display: contents;
+}
+
+.toolbar {
+  background-color: $nist_light_yellow;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.toolbar-name-container {
+  position: relative;
+  padding: 10px;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.toolbar-name {
+  text-wrap: pretty;
+  font-weight: 400;
+  font-size: 25px;
+  color: black !important;
+  bottom: 0;
+  padding: 0;
+}
+
+.nav-links-bar {
+  background-color: $nist_dark_yellow;
+  padding: 0px 0px 0px 0px;
+  justify-content: space-between;
+  -webkit-box-shadow: 0px 3px 5px -2px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 3px 5px -2px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 3px 5px -2px rgba(0, 0, 0, 0.75);
+  margin-top: 0;
+  width: 100%;
+}
+
+.nav-progress-bar {
+  padding: 0px 0px 0px 0px;
+  -webkit-box-shadow: 0px 3px 5px -2px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 3px 5px -2px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 3px 5px -2px rgba(0, 0, 0, 0.75);
+}
+
+.toolname-abbrv {
+  color: $tool_abbrv_color;
+  font-size: 0.7em;
+}
+
+
+li {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+li a {
+  color: $nist_dark_blue;
+}
+
+.nav-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nav-item:hover {
+  background-color: $nist_light_yellow;
+  cursor: pointer;
+}
+
+.active {
+  background-color: $nist_light_yellow;
+}
+
+.active-dropdown {
+  background-color: $nist_light_yellow;
+  color: black;
+}
+
+.inline-menu {
+  display: contents;
+}
+
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.navbar-nav .dropdown-menu {
+  position: absolute;
+}
+
+.user-nav-item .dropdown-menu {
+  left: unset;
+  right: 0;
+}
+
+// Hint (Responsive): You can change the width breakpoint to best fit your header (variables file)
+@media (max-width: $screen_size_header_breakpoint) {
+  .navbar-nav .dropdown-menu {
+    position: static;
+    background-color: $nist_light_yellow;
+    border: 0;
+  }
+
+  .navbar-nav {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .nav-item {
+    width: 100%;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .nav-links-bar {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  .toolbar-name-container {
+    gap: 10px;
+  }
+}

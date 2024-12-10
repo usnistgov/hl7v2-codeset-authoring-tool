@@ -1,0 +1,5 @@
+<dam-list-widget [list]="codesetList" [controls]="controls" [sortOptions]="sortOptions" title="Codeset List"
+  [sort]="sort" [showFilterText]="true" [showSort]="true">
+  <!-- <ng-template #content> This is my description content </ng-template> -->
+  <ng-template #listItem let-item> {{ item.data.name }} </ng-template>
+</dam-list-widget>

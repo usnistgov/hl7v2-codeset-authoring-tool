@@ -1,0 +1,36 @@
+<dam-layout *ngIf="codeset$ | async as codeset">
+
+  <ng-template #alerts>
+    <dam-alerts-container></dam-alerts-container>
+  </ng-template>
+
+  <ng-template #titleBar>
+    <h2 class="title"><fa-icon icon="file" style="margin-right: 10px;"></fa-icon>{{codeset.name}}</h2>
+    <div>
+      <app-input-copy type="text" [value]="codeSetURL" label="URL"></app-input-copy>
+    </div>
+  </ng-template>
+
+  <ng-template #toolbar>
+    <div>
+      <dam-fullscreen-button></dam-fullscreen-button>
+    </div>
+    <div>
+      <dam-reset-button></dam-reset-button>
+      <dam-save-button></dam-save-button>
+    </div>
+  </ng-template>
+
+  <ng-template #editorContent>
+    <router-outlet></router-outlet>
+  </ng-template>
+
+  <ng-template #sideBar>
+    <app-codeset-sidebar></app-codeset-sidebar>
+  </ng-template>
+
+  <ng-template #collapsedSideBar>
+    <dam-side-bar-toggle></dam-side-bar-toggle>
+  </ng-template>
+
+</dam-layout>

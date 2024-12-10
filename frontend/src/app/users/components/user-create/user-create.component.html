@@ -1,0 +1,35 @@
+<div style="height: 100%; width: 100%; padding: 3rem; background-color: white; overflow: scroll;">
+  <div style="max-width: 800px; margin: auto;">
+    <div class="mb-3">
+      <dam-alerts-container></dam-alerts-container>
+    </div>
+    <h2 style="text-align: center;">Create User</h2>
+    <form [formGroup]="form">
+      <div class="mb-3">
+        <label class="form-label" for="name">Username*</label>
+        <input type="text" class="form-control" name="username" id="username" formControlName="username">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">First name</label>
+        <input type="text" class="form-control" name="description" id="description" formControlName="firstName">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Last name</label>
+        <input type="text" class="form-control" name="lastName" id="lastName" formControlName="lastName">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Password*</label>
+        <input type="text" class="form-control" name="password" id="password" formControlName="password">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Confirm Password*</label>
+        <input type="text" class="form-control" name="description" id="description" formControlName="confirm">
+      </div>
+    </form>
+    <div class="mb-3" style="display: flex; justify-content: flex-end; width: 100%;">
+      <button (click)="submit()" class="btn btn-primary" [disabled]="form.invalid">
+        Create
+      </button>
+    </div>
+  </div>
+</div>

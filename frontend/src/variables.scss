@@ -1,0 +1,49 @@
+// Theme Colors
+$nist_dark_blue: #021a4c;
+$nist_light_blue: #739fff;
+$nist_dark_yellow: #F3C60D;
+$nist_light_yellow: #ffec9d;
+$tool_abbrv_color: #ff6f6f;
+
+// Application Background
+%app-background {
+  @extend %blue-bg;
+}
+
+%blue-bg {
+  background: #1488CC;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #2B32B2, #1488CC);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #2B32B2, #1488CC);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+// Hint (Responsive): Screen size breakpoint
+$screen_size_breakpoint: 1000px;
+$screen_size_header_breakpoint: $screen_size_breakpoint;
+
+// Entity Badge Colors
+
+// Scope Badge Colors
+
+// Delta Color
+
+
+// Page Container
+%page-wrapper {
+  background-color: #f7f7f7;
+  padding: 10px;
+  padding-top: 50px;
+  padding-left: 100px;
+  padding-right: 100px;
+  height: 100%;
+}
+
+.page-title {
+  margin-bottom: 50px;
+}
+
+.button-badge {
+  border-radius: 50% !important;
+}

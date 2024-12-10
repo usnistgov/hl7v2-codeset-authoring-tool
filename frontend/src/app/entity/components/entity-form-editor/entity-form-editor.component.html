@@ -1,0 +1,36 @@
+<ng-template #headerTitle >
+  <div style="display: flex; align-items: center; gap: 10px; margin-right: 10px;">
+    <div>{{ initialLabel() }}</div>
+    <fa-icon icon="chevron-right"></fa-icon>
+    <div>{{metadata.title}}</div>
+  </div>
+</ng-template>
+<ng-template #headerControls >
+  <div style="display: flex; align-items: center; gap: 5px; margin-right: 10px;">
+    <button class="btn btn-sm btn-primary" (click)="addFieldDialog()">
+      <fa-icon icon="plus"></fa-icon>
+    </button>
+  </div>
+</ng-template>
+
+<div *ngIf="current()?.validation?.validated && !current()?.validation?.valid">
+  <div class="alert alert-danger">
+    You have invalid fields
+  </div>
+</div>
+
+<form *ngIf="form() as fromValue" [formGroup]="fromValue">
+  <div class="mb-3">
+    <label for="label" class="form-label">Section Name</label>
+    <input type="text" class="form-control" id="label" placeholder="Name" formControlName="label">
+  </div>
+  @for (field of fieldsList(); track $index) {
+    <div class="mb-3">
+      <button class="btn btn-sm btn-danger" style="margin-right: 10px;" (click)="removeField(field.key)">
+        <fa-icon icon="minus"></fa-icon>
+      </button>
+      <label [for]="field.key" class="form-label">{{ field.label }}</label>
+      <input type="text" class="form-control" [id]="field.key" [formControlName]="field.key">
+    </div>
+  }
+</form>
