@@ -9,8 +9,10 @@ public class CodesetVersionSimpleDTO {
     private Date dateCommitted;
     private String status;
     private String comments;
+    private boolean isLatestStable;
 
-    public CodesetVersionSimpleDTO(String id, String version, Boolean exposed, Date dateCreated,Date dateCommitted, String status, String comments) {
+
+    public CodesetVersionSimpleDTO(String id, String version, Boolean exposed, Date dateCreated,Date dateCommitted, String status, String comments, Boolean isLatestStable) {
         this.id = id;
         this.version = version;
         this.exposed = exposed;
@@ -18,6 +20,7 @@ public class CodesetVersionSimpleDTO {
         this.dateCommitted = dateCommitted;
         this.status = status;
         this.comments = comments;
+        this.isLatestStable = isLatestStable;
     }
 
     public String getId() {
@@ -74,5 +77,13 @@ public class CodesetVersionSimpleDTO {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public boolean isLatestStable() {
+        return isLatestStable;
+    }
+
+    public void setLatestStable(boolean latestStable) {
+        isLatestStable = latestStable;
     }
 }

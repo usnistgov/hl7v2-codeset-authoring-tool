@@ -34,9 +34,10 @@
             <span *ngIf="!codeSetVersion.dateCommitted" style="color: blue; font-size: 0.75em;">in progress</span>
           </div>
           <ng-container
-            *ngTemplateOutlet="versionIcon; context: { $implicit: i, single: codeSetVersions.length === 1, size: codeSetVersions.length }"></ng-container>
+            *ngTemplateOutlet="versionIcon; context: { $implicit: i, single: codeSetVersions.length === 1, size: codeSetVersions.length, latest: codeSetVersion.latestStable}">
+          </ng-container>
           <div class="version-text" [ngStyle]="{color: !codeSetVersion.dateCommitted ? 'gray' : 'black'}">
-            v<span
+            <span
               [ngStyle]="{'font-weight': codeSetVersion.dateCommitted ? 'bold' : 'normal'}">{{codeSetVersion.version}}</span>
             <span *ngIf="codeSetVersion.dateCommitted" style="margin-left: 10px; font-size: 0.80em; color: gray"
               [ngbPopover]="codeSetVersion.comments" triggers="mouseenter:mouseleave" container="body"
@@ -74,6 +75,10 @@
       'version-line-middle': !single && i > 1 && i < (size - 1)
     }"></div>
     <div class="version-ball"
-      [ngClass]="{ 'version-committed': !single && i > 0 , 'version-inprogress': single || i === 0 }"></div>
+      [ngClass]="{ 'version-committed': !single && i > 0 , 'version-inprogress': single || i === 0, 'version-latest-stable': latest }">
+      @if (latest) {
+      <span>LS</span>
+      }
+    </div>
   </div>
 </ng-template>

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, EventEmitter, Inject, Input, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogContent, MatDialogTitle, MatDialogActions, MatDialogClose } from "@angular/material/dialog";
 import { ICodesetVersion, ICodesetVersionCode } from '../../models/codeset';
 import { Guid } from 'guid-typescript';
@@ -35,19 +35,15 @@ export class CodesetTableComponent {
 
   _codeSetVersion!: ICodesetVersion;
   codeSystems: string[] = [];
-  codeSetForm!: FormGroup;
+  @ViewChild('form') form!: NgForm;
 
   @Input()
   set codeSetVersion(codeSetVersion: ICodesetVersion) {
-    this.loadExistingCodes(this._codeSetVersion.codes);
     this._codeSetVersion = codeSetVersion;
     this.codeSystems = this.getUniqueCodeSystems(this._codeSetVersion.codes ? this._codeSetVersion.codes : []);
     this._codeSetVersion.codeSystems = this.codeSystems;
     this.codeSystemOptions = this.getCodeSystemOptions();
     this.selectedCodes = [];
-    this.codeSetForm = this.fb.group({
-      codes: this.fb.array([]) // Initialize an empty FormArray
-    });
   }
   get codeSetVersion() {
     return this._codeSetVersion;
@@ -62,7 +58,7 @@ export class CodesetTableComponent {
 
   filteredCodeSystems: string[] = [];
   @Output()
-  changes: EventEmitter<ICodesetVersionCode[]> = new EventEmitter<ICodesetVersionCode[]>();
+  changes: EventEmitter<{ codes: ICodesetVersionCode[], valid: boolean | null }> = new EventEmitter<{ codes: ICodesetVersionCode[], valid: boolean | null }>();
 
   @Output()
   exportCSVEvent: EventEmitter<any> = new EventEmitter<any>();
@@ -88,30 +84,9 @@ export class CodesetTableComponent {
   ngOnInit() {
     this.editMap[this.codeSetVersion.id] = false;
     this.cols = this.selectedColumns;
-    this.codeSetForm = this.fb.group({
-      codes: this.fb.array([]) // Initialize an empty FormArray
-    });
   }
   constructor(private fb: FormBuilder) {
 
-  }
-  loadExistingCodes(codes: any[]): void {
-    codes.forEach(code => this.addCodeRow(code));
-  }
-  addCodeRow(codeData: any = null): void {
-    const codeFormGroup = this.fb.group({
-      id: [codeData?.id || Guid.create().toString()],
-      code: [codeData?.code || '', Validators.required],
-      description: [codeData?.description || ''],
-      system: [codeData?.system || ''],
-      usage: [codeData?.usage || 'P'],
-      display: [codeData?.display || ''],
-      comments: [codeData?.comments || ''],
-      pattern: [codeData?.pattern || ''],
-      hasPattern: [codeData?.hasPattern || true]
-    });
-
-    // this._codeSetVersion.codes.push(codeFormGroup);
   }
 
   toggleEdit(id: string) {
@@ -180,7 +155,8 @@ export class CodesetTableComponent {
       },
       ...this.codeSetVersion.codes
     ]
-    this.changes.emit(this.codeSetVersion.codes);
+    this.changeCodes();
+
   }
 
   applyUsage(usage: string) {
@@ -197,7 +173,8 @@ export class CodesetTableComponent {
   }
 
   changeCodes() {
-    this.changes.emit(this.codeSetVersion.codes);
+    console.log(this.form, this.form.valid)
+    this.changes.emit({ codes: this.codeSetVersion.codes, valid: this.form.valid });
   }
 
   addCodeSystemFormCode(code: ICodesetVersionCode) {
@@ -210,7 +187,7 @@ export class CodesetTableComponent {
     if (this.codeSetVersion.codes) {
       this.codeSetVersion.codes = this.codeSetVersion.codes.filter((x) => this.selectedCodes.indexOf(x) < 0);
       this.selectedCodes = [];
-      this.changes.emit(this.codeSetVersion.codes);
+      this.changeCodes();
     }
 
 

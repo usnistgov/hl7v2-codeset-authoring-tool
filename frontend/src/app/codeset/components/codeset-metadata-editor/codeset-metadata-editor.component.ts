@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { DamAbstractEditorComponent, DamfEditorInitializer, ISaveResult, IStateCurrent, MessageType, UtilityService } from '@usnistgov/ngx-dam-framework';
-import { ICodeset, ICodesetMetadata } from '../../models/codeset';
+import { ICodeset, ICodesetMetadata, ICodesetVersion } from '../../models/codeset';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { CodesetService } from '../../services/codeset.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { CodesetState } from '../codeset-widget/codeset-widget.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { loadCodeset } from '../../store/codeset.actions';
 
 export const EDITOR_ID = 'TEXT_SECTION_EDITOR';
 
@@ -32,6 +34,7 @@ export const CODESET_METADATA_EDITOR_INITIALIZER: DamfEditorInitializer<ICodeset
     FormsModule,
     ReactiveFormsModule,
     FaIconComponent,
+    DropdownModule
   ],
   templateUrl: './codeset-metadata-editor.component.html',
   styleUrl: './codeset-metadata-editor.component.scss'
@@ -39,7 +42,7 @@ export const CODESET_METADATA_EDITOR_INITIALIZER: DamfEditorInitializer<ICodeset
 export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<ICodesetMetadata> {
   initialLabel?: string;
   form!: FormGroup;
-
+  committedVersions: ICodesetVersion[] = [];
   constructor(private codesetService: CodesetService,
     private utilityService: UtilityService,) {
     super({
@@ -50,6 +53,7 @@ export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<I
     this.form = new FormGroup({
       name: new FormControl(),
       description: new FormControl(),
+      latestVersion: new FormControl()
     });
 
     this.form.valueChanges.pipe(
@@ -72,8 +76,10 @@ export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<I
     ).subscribe();
   }
 
-  override onEditorDataUpdate(data: IStateCurrent<ICodesetMetadata, never>): void {
+  override onEditorDataUpdate(data: IStateCurrent<ICodeset, never>): void {
     if (data.initial) {
+      this.committedVersions = data.value.versions.filter(v => v.dateCommitted !== null);
+
       this.form.patchValue(data.value, { emitEvent: false });
       this.initialLabel = data.value.name;
     }
@@ -88,7 +94,13 @@ export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<I
 
     return this.codesetService.updateCodeset(current.value, current.value.id).pipe(
       map((res) => {
-        CodesetState.setValue(this.store, res.data as ICodeset)
+        console.log(res.data)
+        if (res.data) {
+          // CodesetState.setValue(this.store, res.data as ICodeset)
+          this.store.dispatch(loadCodeset({ codesetId: res.data.id, redirect: false }));
+        }
+
+
         return {
           success: true,
           message: res,

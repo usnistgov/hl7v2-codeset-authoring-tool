@@ -4,9 +4,9 @@ import { ICodeset, ICodesetDescriptor, ICodesetVersion } from "../models/codeset
 
 export const loadCodeset = createAction(
     '[Codeset] Load codeset',
-    props<{ codesetId: string }>()
+    props<{ codesetId: string, redirect: boolean }>()
 );
-export const loadCodesetSuccess = createAction('[Codeset] Load codeset Success', props<{ data: ICodeset }>());
+export const loadCodesetSuccess = createAction('[Codeset] Load codeset Success', props<{ data: ICodeset, redirect: boolean }>());
 export const loadCodesetFailure = createAction('[Codeset] Load codeset Failure', props<{ error: any }>());
 
 export const loadCodesets = createAction(

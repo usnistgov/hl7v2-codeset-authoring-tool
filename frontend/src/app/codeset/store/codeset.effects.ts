@@ -23,7 +23,7 @@ export class CodesetEffects {
         ofType(loadCodeset),
         mergeMap((action) => this.codesetService.getCodesetMetadata(action.codesetId)
             .pipe(
-                map(codeset => loadCodesetSuccess({ data: codeset })),
+                map(codeset => loadCodesetSuccess({ data: codeset, redirect: action.redirect })),
                 catchError((error) => of(loadCodesetFailure({ error })))
             ))
     )
@@ -34,8 +34,10 @@ export class CodesetEffects {
             console.log(action)
             CodesetState.setValue(this.store, action.data)
             CodesetVersionsState.setValue(this.store, action.data.versions)
-            const latestVersion = action.data.versions[0]
-            this.router.navigate([`/codesets/${action.data.id}/versions/${latestVersion.id}`]);
+            if (action.redirect) {
+                const latestVersion = action.data.versions[0]
+                this.router.navigate([`/codesets/${action.data.id}/versions/${latestVersion.id}`]);
+            }
         })
     ), { dispatch: false }
     );

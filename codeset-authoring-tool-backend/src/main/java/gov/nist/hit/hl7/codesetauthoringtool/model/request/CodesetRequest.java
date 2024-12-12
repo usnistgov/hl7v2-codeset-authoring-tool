@@ -14,17 +14,17 @@ public class CodesetRequest {
     private Boolean exposed;
     private List<Code> codes;
 
-    // Constructors, Getters, and Setters
-
+    private String latestVersion;
     public CodesetRequest() {
     }
 
-    public CodesetRequest(String name, String description, String version, Boolean exposed, List<Code> codes) {
+    public CodesetRequest(String name, String description, String version, Boolean exposed, List<Code> codes, String latestVersion) {
         this.name = name;
         this.description = description;
         this.version = version;
         this.exposed = exposed;
         this.codes = codes;
+        this.latestVersion = latestVersion;
     }
 
     public String getName() {
@@ -65,5 +65,13 @@ public class CodesetRequest {
 
     public void setCodes(List<Code> codes) {
         this.codes = codes;
+    }
+
+    public String getLatestVersion() {
+        return latestVersion;
+    }
+
+    public void setLatestVersion(String latestVersion) {
+        this.latestVersion = latestVersion;
     }
 }

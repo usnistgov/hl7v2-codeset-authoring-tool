@@ -162,6 +162,9 @@
             <div *ngSwitchCase="'code'">
               <input (change)="changeCodes()" *ngIf="!viewOnly" [(ngModel)]="rowData.code" [id]="'code' + rowData.id"
                 [name]="'code' + rowData.id" class="form-control" required type="text" />
+              <div *ngIf="form.controls['code' + rowData.id]?.errors?.['required']" class="text-danger">
+                Value is required.
+              </div>
             </div>
             <div *ngSwitchCase="'comments'">
               <input (change)="changeCodes()" *ngIf="!viewOnly" [(ngModel)]="rowData.comments"

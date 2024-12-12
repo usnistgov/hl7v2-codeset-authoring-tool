@@ -36,6 +36,8 @@ export interface ICodesetVersion {
   codes: ICodesetVersionCode[];
   codeSystems: string[];
   comments?: string;
+  latestStable?: boolean;
+
 }
 export interface ICodesetVersionCode {
   id: string;
@@ -54,6 +56,25 @@ export interface ICodesetVersionCommit {
   comments: string;
   latest: boolean;
   codes: ICodesetVersionCode[];
+}
+
+export interface ICodeDelta {
+  change: DeltaChange;
+  value: ICodePropertyDelta<string>;
+  description: ICodePropertyDelta<string>;
+  codeSystem: ICodePropertyDelta<string>;
+  hasPattern?: ICodePropertyDelta<boolean>;
+  usage?: ICodePropertyDelta<string>;
+  pattern: ICodePropertyDelta<string>;
+  comments: ICodePropertyDelta<string>;
+}
+export interface ICodePropertyDelta<T> {
+  current: T;
+  previous: T;
+  change: DeltaChange;
+}
+export enum DeltaChange {
+  ADDED = 'ADDED', DELETED = 'DELETED', CHANGED = 'CHANGED', NONE = 'NONE',
 }
 
 export enum SectionType {

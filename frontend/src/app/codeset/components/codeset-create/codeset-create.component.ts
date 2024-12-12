@@ -30,7 +30,7 @@ export class CodesetCreateComponent {
   ) {
     this.form = this._formBuilder.group({
       name: ['', Validators.required],
-      descritpion: ['']
+      description: ['']
     })
   }
 
@@ -38,13 +38,17 @@ export class CodesetCreateComponent {
     this.utilityService.useLoaderWithErrorAlert(
       this.codesetService.createCodeset(this.form.value),
       {
+        message: {
+          fromHttpResponse: true,
+          tags: ['CREATE_ENTITY_ISSUES']
+        },
         loader: {
           blockUI: true
         }
       }
     ).pipe(
       tap((message) => {
-        this.router.navigate(["/codesets", message.id]);
+        this.router.navigate(["/codesets", message.id, 'dashboard']);
 
       }),
     ).subscribe();

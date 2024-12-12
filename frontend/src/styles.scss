@@ -77,3 +77,7 @@ tr {
 .mr-1 {
   margin-right: 1rem;
 }
+
+.cdk-overlay-container {
+  z-index: 999999 !important;
+}

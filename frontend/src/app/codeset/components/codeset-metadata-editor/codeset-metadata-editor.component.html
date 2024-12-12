@@ -1,4 +1,4 @@
-<ng-template #headerTitle >
+<ng-template #headerTitle>
   <div style="display: flex; align-items: center; gap: 10px; margin-right: 10px;">
     <div>{{ initialLabel }}</div>
     <fa-icon icon="chevron-right"></fa-icon>
@@ -14,5 +14,12 @@
   <div class="mb-3">
     <label for="value" class="form-label">Description</label>
     <input type="text" class="form-control" id="description" placeholder="Description" formControlName="description">
+  </div>
+
+  <div class="mb-3">
+    <label for="defaultVersion" style="margin-right: 5px;"><strong>Latest Stable Version</strong></label><br>
+    <p-dropdown [options]="committedVersions" formControlName="latestVersion" optionLabel="version"
+      optionValue="version">
+    </p-dropdown>
   </div>
 </form>

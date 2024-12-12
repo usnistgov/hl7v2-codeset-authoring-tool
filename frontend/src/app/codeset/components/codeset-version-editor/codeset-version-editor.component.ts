@@ -1,6 +1,6 @@
 import { Component, computed, Signal, signal, WritableSignal } from '@angular/core';
 import { DamAbstractEditorComponent, DamfEditorInitializer, DataStateValue, ISaveResult, IStateCurrent, MessageHandlerMode, MessageType, selectRouteParams, UtilityService } from '@usnistgov/ngx-dam-framework';
-import { catchError, flatMap, map, mergeMap, Observable, of, take, tap } from 'rxjs';
+import { catchError, combineLatest, flatMap, map, mergeMap, Observable, of, take, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -14,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ImportCodesDialogComponent } from '../import-codes-dialog/import-codes-dialog.component';
 import { InputCopyComponent } from '../input-copy/input-copy.component';
 import { loadCodeset } from '../../store/codeset.actions';
-import { CodesetState } from '../codeset-widget/codeset-widget.component';
+import { CodesetState, CodesetVersionsState } from '../codeset-widget/codeset-widget.component';
 
 export const EDITOR_ID = 'FORM_SECTION_EDITOR';
 
@@ -55,7 +55,7 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
   codesetId: string = '';
   versionURL: string = '';
   codeSetURL: string = '';
-
+  codesetVersions$: Observable<ICodesetVersion[]>;
   constructor(private dialog: MatDialog, private codesetService: CodesetService, private route: ActivatedRoute, private utilityService: UtilityService,
     private router: Router,
   ) {
@@ -81,6 +81,8 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
         this.codeSetURL = host + '/codesets/' + params['codesetId']
       })
     ).subscribe();
+    this.codesetVersions$ = CodesetVersionsState.findAll(this.store)
+
 
 
   }
@@ -90,15 +92,16 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
 
   }
 
-  public update(codes: ICodesetVersionCode[]): void {
+  public update(event: { codes: ICodesetVersionCode[], valid: boolean | null }): void {
     this.state.change({
       timestamp: new Date(),
       validation: {
-        validated: false,
+        validated: true,
+        valid: event.valid as boolean
       },
       value: {
         ...this.codesetVersion(),
-        codes: codes
+        codes: event.codes
         // label: formContent['label'],
         // fields: Object.keys(fieldsMetadata)
         //   .map((key) => ({
@@ -113,27 +116,42 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
   }
 
   public commitDialog() {
-    this.dialog.open(CommitCodesetVersionDialogComponent, {
-      data: {
-        title: 'Commit Code Set Version',
-        comments: '',
-        version: this.codesetVersion().version,
-      },
-    })
-      .afterClosed()
-      .pipe(
-        mergeMap((res) => {
-          if (res) {
-            console.log(res);
-            // resource.version = res.version;
-            // resource.comments = res.comments;
-            // resource.latest = res.latest;
-            // this.saveAndUpdate(parent, resource);
-            return this.commit(res);
-          }
-          return of();
+    combineLatest([this.store.select(selectRouteParams), this.codesetVersions$]).pipe(
+      take(1),
+      mergeMap((data: any) => {
+        return this.dialog.open(CommitCodesetVersionDialogComponent, {
+          height: '75vh',
+          width: '90vw',
+          position: {
+            top: '15vh',
+            left: '10vw'
+          },
+          data: {
+            title: 'Commit Code Set Version',
+            comments: '',
+            version: this.codesetVersion().version,
+            versionId: this.codesetVersion().id,
+            codesetId: data[0]['codesetId'],
+            versions: data[1]
+
+          },
         })
-      ).subscribe();
+          .afterClosed()
+          .pipe(
+            mergeMap((res) => {
+              if (res) {
+                console.log(res);
+                // resource.version = res.version;
+                // resource.comments = res.comments;
+                // resource.latest = res.latest;
+                // this.saveAndUpdate(parent, resource);
+                return this.commit(res);
+              }
+              return of();
+            })
+          )
+      })
+    ).subscribe();
   }
 
   commit(codesetVersionCommit: ICodesetVersionCommit) {
@@ -158,7 +176,7 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
         CodesetState.getOneValue(this.store).pipe(
           take(1),
           map((codeset) => {
-            this.store.dispatch(loadCodeset({ codesetId: codeset.id }));
+            this.store.dispatch(loadCodeset({ codesetId: codeset.id, redirect: true }));
 
           })
         ).subscribe()
@@ -172,8 +190,7 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
   override AfterEditorNgViewInit(): void {
   }
   override onEditorNgInit(): void {
-    this.codesetId = this.route.snapshot.params['codesetId'];
-    console.log(this.codesetId, this.route.snapshot.paramMap)
+
   }
   override onEditorNgDestoy(): void {
   }
@@ -209,7 +226,7 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
       next: (codes: ICodesetVersionCode[]) => {
         console.log(codes);
         if (codes) {
-          this.update(codes);
+          this.update({ codes, valid: true });
         }
       },
     });

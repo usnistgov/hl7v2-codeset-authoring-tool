@@ -1,4 +1,5 @@
 package gov.nist.hit.hl7.codesetauthoringtool.controller;
+import gov.nist.hit.hl7.codesetauthoringtool.model.CodeDelta;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.CommitRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.TableCSVGenerator;
 import org.apache.commons.io.IOUtils;
@@ -15,6 +16,7 @@ import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.CodesetVersionServiceIm
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.FileCopyUtils;
@@ -108,7 +110,15 @@ public class CodesetController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CodesetVersion newCodesetVersion = codesetService.commitCodesetVersion(id, versionId, body, authentication.getName());
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set version Committed Successfully", newCodesetVersion.getId(), null, newCodesetVersion);
+    }
 
+    @RequestMapping(value = "/{id}/compare/{sourceVersionId}/{targetVersionId}", produces = "application/json", method = RequestMethod.GET)
+    public List<CodeDelta> compare(
+            @PathVariable String id,
+            @PathVariable String sourceVersionId,
+            @PathVariable String targetVersionId
+    ) throws Exception {
+        return codesetService.getCodeDelta(id, sourceVersionId, targetVersionId);
     }
 
 
