@@ -8,7 +8,6 @@ public class CommitRequest {
     private String version;
     private String comments;
     private Boolean latest;
-    private List<Code> codes;
 
     public CommitRequest() {
     }
@@ -37,11 +36,5 @@ public class CommitRequest {
         this.latest = latest;
     }
 
-    public List<Code> getCodes() {
-        return codes;
-    }
 
-    public void setCodes(List<Code> codes) {
-        this.codes = codes;
-    }
 }

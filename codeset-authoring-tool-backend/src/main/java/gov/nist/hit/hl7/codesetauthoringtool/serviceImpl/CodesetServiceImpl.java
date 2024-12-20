@@ -197,13 +197,7 @@ public class CodesetServiceImpl implements CodesetService {
         existingCodesetVersion.setStatus("published");
         existingCodesetVersion.setComments(body.getComments());
 
-        // Clear the existing codes
-        existingCodesetVersion.getCodes().clear();
-        // Add the new codes and set the relationship properly
-        for (Code code : body.getCodes()) {
-            code.setCodesetVersion(existingCodesetVersion); // Ensure the correct association
-            existingCodesetVersion.getCodes().add(code);
-        }
+
 
         // Create a new CodesetVersion
         CodesetVersion newCodesetVersion = new CodesetVersion(
@@ -227,7 +221,6 @@ public class CodesetServiceImpl implements CodesetService {
 
         // Add the new version to the Codeset
         codeset.getVersions().add(newCodesetVersion);
-        codeset.setLatestVersion(existingCodesetVersion.getVersion());
         if(body.getLatest()){
             codeset.setLatestVersion(cleanedVersion);
         }
@@ -403,7 +396,7 @@ public class CodesetServiceImpl implements CodesetService {
                         version.getDateCommitted(),
                         version.getStatus(),
                         version.getComments(),
-                        codeset.getLatestVersion().equals(version.getVersion())? true : false
+                        (codeset.getLatestVersion() != null && codeset.getLatestVersion().equals(version.getVersion()) )? true : false
                 )).sorted((v1, v2) -> v2.getDateCreated().compareTo(v1.getDateCreated()))
                 .collect(Collectors.toList());
 

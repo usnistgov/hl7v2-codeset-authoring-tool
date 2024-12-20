@@ -61,7 +61,7 @@ export class CodesetListComponent {
       disabled: () => false,
       hidden: () => false,
       onClick: (item: ICodesetDescriptor) => {
-        this.router.navigate(['/', 'codesets', item.id]);
+        this.router.navigate(['/', 'codesets', item.id, 'dashboard']);
       },
     },
   ];

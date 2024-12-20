@@ -147,11 +147,11 @@ export class CodesetTableComponent {
         code: '',
         description: '',
         system: '',
-        usage: 'P',
+        usage: '',
         display: '',
         comments: '',
         pattern: '',
-        hasPattern: true,
+        hasPattern: false,
       },
       ...this.codeSetVersion.codes
     ]
@@ -173,10 +173,23 @@ export class CodesetTableComponent {
   }
 
   changeCodes() {
-    console.log(this.form, this.form.valid)
     this.changes.emit({ codes: this.codeSetVersion.codes, valid: this.form.valid });
   }
+  setHasPattern(code: ICodesetVersionCode) {
+    code.hasPattern = true;
+    code.pattern = '';
+    // add pattern control to the form to make form validation work correctly
+    this.form.control.addControl('pattern' + code.id, new FormControl('', { validators: Validators.required, updateOn: 'blur' }));
+    this.changeCodes();
+  }
 
+  removeHasPattern(code: ICodesetVersionCode) {
+    code.hasPattern = false;
+    code.pattern = '';
+    // remove pattern control to the form to make form validation work correctly
+    this.form.control.removeControl('pattern' + code.id);
+    this.changeCodes();
+  }
   addCodeSystemFormCode(code: ICodesetVersionCode) {
     code.system = this.temp;
     this.addCodeSystem(code.id);

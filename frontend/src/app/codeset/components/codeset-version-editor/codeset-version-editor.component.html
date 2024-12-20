@@ -10,13 +10,11 @@
     }
   </div>
   }
-
-
 </ng-template>
 <ng-template #headerControls>
   <div>
     <button class="btn btn-sm btn-dark" (click)="commitDialog()" *ngIf="!codesetVersion().dateCommitted"
-      [disabled]="codesetVersion().codes.length === 0">
+      [disabled]="codesetVersion().codes.length === 0 || status().changed">
       <fa-icon icon="check"></fa-icon>
       Commit
     </button>

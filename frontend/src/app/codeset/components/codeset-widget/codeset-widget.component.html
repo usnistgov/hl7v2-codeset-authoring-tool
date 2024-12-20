@@ -5,10 +5,13 @@
   </ng-template>
 
   <ng-template #titleBar>
-    <h2 class="title"><fa-icon icon="file" style="margin-right: 10px;"></fa-icon>{{codeset.name}}</h2>
-    <div>
-      <app-input-copy type="text" [value]="codeSetURL" label="URL"></app-input-copy>
+    <div class="row">
+      <h2 class="col-md-6 col-sm-12"><fa-icon icon="file" style="margin-right: 10px;"></fa-icon>{{codeset.name}}</h2>
+      <div class="col-md-6 col-sm-12">
+        <app-input-copy type="text" [value]="codeSetURL" label="URL"></app-input-copy>
+      </div>
     </div>
+
   </ng-template>
 
   <ng-template #toolbar>

@@ -93,6 +93,7 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
   }
 
   public update(event: { codes: ICodesetVersionCode[], valid: boolean | null }): void {
+    console.log(event)
     this.state.change({
       timestamp: new Date(),
       validation: {
