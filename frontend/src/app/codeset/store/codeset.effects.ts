@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY, of } from 'rxjs';
 import { map, exhaustMap, catchError, mergeMap, tap } from 'rxjs/operators';
 import { CodesetService } from '../services/codeset.service';
-import { loadCodeset, loadCodesetFailure, loadCodesets, loadCodesetsFailure, loadCodesetsSuccess, loadCodesetSuccess } from './codeset.actions';
+import { deleteCodesetVersion, deleteCodesetVersionFailure, deleteCodesetVersionSuccess, loadCodeset, loadCodesetFailure, loadCodesets, loadCodesetsFailure, loadCodesetsSuccess, loadCodesetSuccess } from './codeset.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CodesetState, CodesetVersionsState } from '../components/codeset-widget/codeset-widget.component';
 import { Store } from '@ngrx/store';
@@ -19,6 +19,23 @@ export class CodesetEffects {
             ))
     )
     );
+    deleteCodesetVersion$ = createEffect(() => inject(Actions).pipe(
+        ofType(deleteCodesetVersion),
+        mergeMap((action) => this.codesetService.deleteCodesetVersion(action.codesetId, action.codesetVersionId)
+            .pipe(
+                map(codeset => deleteCodesetVersionSuccess({ data: codeset, redirect: action.redirect })),
+                catchError((error) => of(deleteCodesetVersionFailure({ error })))
+            ))
+    )
+    );
+    // deleteCodesetVersionSuccess$ = createEffect(() => inject(Actions).pipe(
+    //     ofType(deleteCodesetVersionSuccess),
+    //     tap((action) => {
+    //         console.log(action)
+    //         this.store.dispatch(loadCodeset({ codesetId: action.data.data?.id as string, redirect: false }));
+    //     })
+    // ), { dispatch: false }
+    // );
     loadCodeset$ = createEffect(() => inject(Actions).pipe(
         ofType(loadCodeset),
         mergeMap((action) => this.codesetService.getCodesetMetadata(action.codesetId)
@@ -31,7 +48,6 @@ export class CodesetEffects {
     loadCodesetSuccess$ = createEffect(() => inject(Actions).pipe(
         ofType(loadCodesetSuccess),
         tap((action) => {
-            console.log(action)
             CodesetState.setValue(this.store, action.data)
             CodesetVersionsState.setValue(this.store, action.data.versions)
             if (action.redirect) {

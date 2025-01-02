@@ -92,6 +92,14 @@ public class CodesetController {
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Version Saved Successfully", newCodesetVersion.getId(), null, newCodesetVersion);
     }
 
+    @RequestMapping(value = "/{id}/versions/{versionId}", produces = "application/json", method = RequestMethod.DELETE)
+    public ResponseMessage<?> saveCodesetVersion(@PathVariable String id, @PathVariable String versionId) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        codesetService.deleteCodesetVersion(id, versionId, authentication.getName());
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Version Deleted Successfully", null, null, null);
+    }
+
+
     @RequestMapping(value = "/{id}/versions/{versionId}/exportCSV", method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded; charset=UTF-8")
     public void exportCSV(@PathVariable String id, @PathVariable String versionId, HttpServletResponse response)
             throws IOException {

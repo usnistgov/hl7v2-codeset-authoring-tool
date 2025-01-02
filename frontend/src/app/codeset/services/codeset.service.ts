@@ -35,6 +35,9 @@ export class CodesetService {
   updateCodeset(codeset: ICodesetMetadata, id: string): Observable<IMessage<ICodeset>> {
     return this.http.put<IMessage<ICodeset>>(`${this.CODESET_END_POINT}${id}`, codeset);
   }
+  deleteCodesetVersion(codesetId: string, codesetVersionId: string): Observable<IMessage<ICodeset>> {
+    return this.http.delete<IMessage<ICodeset>>(`${this.CODESET_END_POINT}${codesetId}/versions/${codesetVersionId}`);
+  }
   getCodesetVersion(codesetId: string, versionId: string): Observable<ICodesetVersion> {
     return this.http.get<ICodesetVersion>(`${this.CODESET_END_POINT}${codesetId}/versions/${versionId}`);
   }
@@ -46,10 +49,8 @@ export class CodesetService {
   }
 
   exportCSV(codesetId: string, versionId: string) {
-    console.log("1111")
     const form = document.createElement('form');
     form.action = `${this.CODESET_END_POINT}${codesetId}/versions/${versionId}/exportCSV`
-    console.log(form)
     form.method = 'POST';
     form.style.display = 'none';
     document.body.appendChild(form);

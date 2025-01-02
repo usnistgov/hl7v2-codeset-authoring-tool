@@ -26,8 +26,21 @@
 
         <li style="padding: 0;" *ngFor="let codeSetVersion of codeSetVersions; let i = index"
           routerLinkActive="nav-active-link" [routerLink]="['versions', codeSetVersion.id]"
-          class="list-group-item codeset-version-list-item cursor-pointer">
-
+          class="list-group-item codeset-version-list-item cursor-pointer"
+          (contextmenu)="onContextMenu($event, codeSetVersion)">
+          <p-contextMenu #cm appendTo="body" [model]="options" (onHide)="onHide()">
+            <ng-template #item let-item>
+              <a class="flex items-center p-menuitem-link">
+                <fa-icon [icon]="item.icon" class="sb-icon"></fa-icon>
+                <span class="ml-2">{{ item.label }}</span>
+              </a>
+            </ng-template>
+          </p-contextMenu>
+          <!-- <context-menu #codeSetVersionMenu>
+            <ng-template (execute)="deleteCodeSetVersion(codeSetVersion)" contextMenuItem>
+              <i class="fa fa-remove"></i> Delete
+            </ng-template>
+          </context-menu> -->
           <div style="width: 100px; text-align: center;">
             <span *ngIf="codeSetVersion.dateCommitted"
               style="color: gray; font-size: 0.75em;">{{codeSetVersion.dateCommitted | date}}</span>

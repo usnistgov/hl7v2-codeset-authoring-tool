@@ -24,6 +24,7 @@ public interface CodesetService {
 
     CodesetVersion getCodesetVersion(String id, String versionId, String username) throws IOException;
     public CodesetVersion saveCodesetVersion(String codesetId, String codesetVersionId, CodesetVersion codesetVersion, String username) throws IOException;
+    public void deleteCodesetVersion(String codesetId, String codesetVersionId,String username) throws IOException;
     public CodesetVersion commitCodesetVersion(String codesetId, String codesetVersionId, CommitRequest body, String username) throws IOException;
     public List<CodeDelta> getCodeDelta(String codesetId, String codeSetVersionId, String targetId) throws Exception;
 }

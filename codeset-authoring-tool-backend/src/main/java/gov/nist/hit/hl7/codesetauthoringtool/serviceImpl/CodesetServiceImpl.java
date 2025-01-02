@@ -158,6 +158,35 @@ public class CodesetServiceImpl implements CodesetService {
         // Save the updated CodesetVersion
         return codesetVersionRepository.save(existingCodesetVersion);
     }
+    @Override
+    public String deleteCodesetVersion(String codesetId, String codesetVersionId,String username) throws IOException {
+        ApplicationUser owner = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+
+        Codeset codeset = codesetRepository.findById(codesetId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Codeset not found or you don't have access to it."));
+
+        if(!codeset.getVersions().stream().filter(v -> codesetVersionId.equals(v.getId())).findAny().isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Codeset version not found.");
+        }
+
+        // Retrieve the existing CodesetVersion from the database
+        CodesetVersion existingCodesetVersion = this.codesetVersionRepository.findById(codesetVersionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Codeset version not found."));
+
+        if(existingCodesetVersion.getDateCommitted() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot delete the version in progress.");
+        }
+        if(existingCodesetVersion.getVersion().equals(codeset.getLatestVersion())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot delete the version marked as latest.");
+        }
+
+        codeset.getVersions().remove(existingCodesetVersion);
+
+        this.codesetRepository.save(codeset);
+        this.codesetVersionRepository.deleteById(existingCodesetVersion.getId());
+
+    }
 
     @Override
     @Transactional
