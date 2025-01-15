@@ -42,7 +42,7 @@ public class Codeset {
     public Codeset(String name,String description, Boolean isPublic, Date dateUpdated, Date dateCreated, List<CodesetVersion> versions) {
         this.name = name;
         this.description = description;
-        this.isPublic = isPublic;
+        this.isPublic = isPublic == null ? false : isPublic;
         this.dateUpdated = dateUpdated;
         this.dateCreated = dateCreated;
         this.versions = new ArrayList<>(versions);

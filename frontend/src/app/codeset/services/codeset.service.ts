@@ -35,6 +35,9 @@ export class CodesetService {
   updateCodeset(codeset: ICodesetMetadata, id: string): Observable<IMessage<ICodeset>> {
     return this.http.put<IMessage<ICodeset>>(`${this.CODESET_END_POINT}${id}`, codeset);
   }
+  deleteCodeset(codesetId: string): Observable<IMessage<ICodeset>> {
+    return this.http.delete<IMessage<ICodeset>>(`${this.CODESET_END_POINT}${codesetId}`);
+  }
   deleteCodesetVersion(codesetId: string, codesetVersionId: string): Observable<IMessage<ICodeset>> {
     return this.http.delete<IMessage<ICodeset>>(`${this.CODESET_END_POINT}${codesetId}/versions/${codesetVersionId}`);
   }

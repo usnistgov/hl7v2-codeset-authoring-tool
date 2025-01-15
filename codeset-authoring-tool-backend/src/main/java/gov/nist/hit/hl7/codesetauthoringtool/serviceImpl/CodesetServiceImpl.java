@@ -3,6 +3,7 @@ package gov.nist.hit.hl7.codesetauthoringtool.serviceImpl;
 import gov.nist.hit.hl7.codesetauthoringtool.dto.CodesetDTO;
 import gov.nist.hit.hl7.codesetauthoringtool.dto.CodesetListItemDTO;
 import gov.nist.hit.hl7.codesetauthoringtool.dto.CodesetVersionSimpleDTO;
+import gov.nist.hit.hl7.codesetauthoringtool.exception.NotFoundException;
 import gov.nist.hit.hl7.codesetauthoringtool.model.*;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.CodesetRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.CodesetSearchCriteria;
@@ -125,6 +126,16 @@ public class CodesetServiceImpl implements CodesetService {
 
         return convertToDTO(codeset);
     }
+
+    @Override
+    public void deleteCodeset(String id, String username) throws IOException, NotFoundException {
+        ApplicationUser owner = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found with username: " + username));
+
+        Codeset codeset = codesetRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Codeset not found or you don't have access to it."));
+        this.codesetRepository.deleteById(id);
+    }
     @Override
     public CodesetVersion getCodesetVersion(String id, String versionId, String username) throws IOException {
         ApplicationUser owner = userRepository.findByUsername(username)
@@ -135,13 +146,13 @@ public class CodesetServiceImpl implements CodesetService {
     }
 
     @Override
-    public CodesetVersion saveCodesetVersion(String codesetId, String codesetVersionId, CodesetVersion codesetVersion, String username) throws IOException {
+    public CodesetVersion saveCodesetVersion(String codesetId, String codesetVersionId, CodesetVersion codesetVersion, String username) throws IOException, NotFoundException {
         ApplicationUser owner = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         // Retrieve the existing CodesetVersion from the database
         CodesetVersion existingCodesetVersion = this.codesetVersionRepository.findById(codesetVersionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Codeset version not found."));
+                .orElseThrow(() -> new NotFoundException("Codeset version not found."));
 
         // Clear the existing codes
         existingCodesetVersion.getCodes().clear();
@@ -154,31 +165,31 @@ public class CodesetServiceImpl implements CodesetService {
             code.setCodesetVersion(existingCodesetVersion); // Ensure the correct association
             existingCodesetVersion.getCodes().add(code);
         }
-
+        System.out.println(existingCodesetVersion.getCodes());
         // Save the updated CodesetVersion
         return codesetVersionRepository.save(existingCodesetVersion);
     }
     @Override
-    public String deleteCodesetVersion(String codesetId, String codesetVersionId,String username) throws IOException {
+    public void deleteCodesetVersion(String codesetId, String codesetVersionId,String username) throws IOException, NotFoundException {
         ApplicationUser owner = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new NotFoundException("User not found with username: " + username));
 
         Codeset codeset = codesetRepository.findById(codesetId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Codeset not found or you don't have access to it."));
+                .orElseThrow(() -> new NotFoundException("Codeset not found or you don't have access to it."));
 
         if(!codeset.getVersions().stream().filter(v -> codesetVersionId.equals(v.getId())).findAny().isPresent()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Codeset version not found.");
+            throw new NotFoundException("Codeset version not found.");
         }
 
         // Retrieve the existing CodesetVersion from the database
         CodesetVersion existingCodesetVersion = this.codesetVersionRepository.findById(codesetVersionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Codeset version not found."));
+                .orElseThrow(() -> new NotFoundException("Codeset version not found."));
 
         if(existingCodesetVersion.getDateCommitted() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot delete the version in progress.");
+            throw new IOException( "Cannot delete the version in progress.");
         }
         if(existingCodesetVersion.getVersion().equals(codeset.getLatestVersion())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot delete the version marked as latest.");
+            throw new IOException( "Cannot delete the version marked as latest.");
         }
 
         codeset.getVersions().remove(existingCodesetVersion);

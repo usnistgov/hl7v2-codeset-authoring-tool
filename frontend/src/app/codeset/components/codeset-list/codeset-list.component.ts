@@ -1,14 +1,17 @@
 import { Component, inject } from '@angular/core';
 import {
   AlertService,
+  ConfirmDialogComponent,
   DataStateRepository,
   IListItemControl,
   ListWidgetComponent,
+  MessageHandlerMode,
   MessageType,
   SortOrder,
+  UtilityService,
 } from '@usnistgov/ngx-dam-framework';
 import { Store } from '@ngrx/store';
-import { map, of, skip, switchMap, tap, throwError } from 'rxjs';
+import { map, of, skip, switchMap, take, tap, throwError } from 'rxjs';
 import { ICodesetDescriptor } from '../../models/codeset';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,6 +23,7 @@ import {
   RouterLinkActive,
 } from '@angular/router';
 import { CodesetService } from '../../services/codeset.service';
+import { MatDialog } from '@angular/material/dialog';
 
 export const CodesetListState = new DataStateRepository<ICodesetDescriptor>({
   name: 'codesetList', // unique name for this state variable
@@ -62,6 +66,17 @@ export class CodesetListComponent {
       hidden: () => false,
       onClick: (item: ICodesetDescriptor) => {
         this.router.navigate(['/', 'codesets', item.id, 'dashboard']);
+      },
+    },
+    {
+      key: 'delete',
+      label: 'Delete',
+      btnClass: 'btn btn-sm btn-danger ml-1',
+      iconClass: 'bi bi-enter',
+      disabled: () => false,
+      hidden: () => false,
+      onClick: (item: ICodesetDescriptor) => {
+        this.deleteCodeSet(item);
       },
     },
   ];
@@ -120,7 +135,9 @@ export class CodesetListComponent {
   constructor(
     private store: Store,
     private routeSnapshot: ActivatedRoute,
-    private codesetService: CodesetService
+    private codesetService: CodesetService,
+    private dialog: MatDialog,
+    private utilityService: UtilityService,
   ) { }
 
   ngOnInit(): void {
@@ -136,5 +153,49 @@ export class CodesetListComponent {
         })
       )
       .subscribe();
+  }
+
+  deleteCodeSet(item: ICodesetDescriptor) {
+    if (!item) return;
+
+    const confirmDialog$ = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        action: 'Delete Code Set',
+        question: `Are you sure you want to delete this Code Set ${item.name}?`,
+      },
+    }).afterClosed();
+
+    confirmDialog$.pipe(
+      take(1),
+      map((confirmed: boolean) => {
+        if (confirmed) {
+          return this.utilityService.use(
+            this.codesetService.deleteCodeset(item.id),
+            {
+              loader: {
+                blockUI: true
+              },
+              alert: {
+                fromHttpResponse: true,
+                mode: MessageHandlerMode.MESSAGE_RESULT_AND_ERROR
+              }
+
+            }
+          ).pipe(
+            map(res => {
+              console.log(res)
+              // CodesetState.getOneValue(this.store).pipe(
+              //   take(1),
+              //   map((codeset) => {
+              //     this.store.dispatch(loadCodeset({ codesetId: codeset.id, redirect: true }));
+
+              //   })
+              // ).subscribe()
+            })
+          ).subscribe()
+        }
+        return of();
+      })
+    ).subscribe();
   }
 }

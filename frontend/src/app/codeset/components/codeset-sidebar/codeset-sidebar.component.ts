@@ -1,18 +1,19 @@
 import { Component, computed, Input, model, ModelSignal, signal, Signal, ViewChild, WritableSignal } from '@angular/core';
 import { ICodesetVersion, ISectionLink, ISectionLinkDisplay } from '../../models/codeset';
 import { combineLatest, flatMap, map, mergeMap, Observable, of, take, tap } from 'rxjs';
-import { CodesetVersionsState } from '../codeset-widget/codeset-widget.component';
+import { CodesetState, CodesetVersionsState } from '../codeset-widget/codeset-widget.component';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { RouterModule } from '@angular/router';
-import { ConfirmDialogComponent, DamSideBarToggleComponent, selectRouteParams } from '@usnistgov/ngx-dam-framework';
+import { ConfirmDialogComponent, DamSideBarToggleComponent, MessageHandlerMode, selectRouteParams, UtilityService } from '@usnistgov/ngx-dam-framework';
 import { FormsModule } from '@angular/forms';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { MatDialog } from '@angular/material/dialog';
 import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 import { MenuItem } from 'primeng/api';
-import { deleteCodesetVersion } from '../../store/codeset.actions';
+import { deleteCodesetVersion, loadCodeset } from '../../store/codeset.actions';
+import { CodesetService } from '../../services/codeset.service';
 
 @Component({
   selector: 'app-codeset-sidebar',
@@ -39,7 +40,7 @@ export class CodesetSidebarComponent {
   @ViewChild('cm') cm!: ContextMenu;
   options: MenuItem[] = []
   selectedCodesetVersion!: ICodesetVersion | null;
-  constructor(private store: Store, private dialog: MatDialog,) {
+  constructor(private store: Store, private dialog: MatDialog, private utilityService: UtilityService, private codesetService: CodesetService,) {
     this.codesetVersions$ = CodesetVersionsState.findAll(this.store)
 
     this.filteredSections = computed(() => {
@@ -91,12 +92,30 @@ export class CodesetSidebarComponent {
       take(1),
       mergeMap(([params, confirmed]: [any, boolean]) => {
         if (confirmed && this.selectedCodesetVersion) {
-          this.store.dispatch(deleteCodesetVersion({
-            codesetId: params.codesetId,
-            codesetVersionId: this.selectedCodesetVersion.id,
-            redirect: false,
-          }));
-          this.selectedCodesetVersion = null;
+          return this.utilityService.use(
+            this.codesetService.deleteCodesetVersion(params.codesetId, this.selectedCodesetVersion.id),
+            {
+              loader: {
+                blockUI: true
+              },
+              alert: {
+                fromHttpResponse: true,
+                mode: MessageHandlerMode.MESSAGE_RESULT_AND_ERROR
+              }
+
+            }
+          ).pipe(
+            map(res => {
+              this.selectedCodesetVersion = null;
+              CodesetState.getOneValue(this.store).pipe(
+                take(1),
+                map((codeset) => {
+                  this.store.dispatch(loadCodeset({ codesetId: codeset.id, redirect: true }));
+
+                })
+              ).subscribe()
+            })
+          )
         }
         return of();
       })

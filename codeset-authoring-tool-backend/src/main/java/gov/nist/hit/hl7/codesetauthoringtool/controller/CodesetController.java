@@ -1,4 +1,5 @@
 package gov.nist.hit.hl7.codesetauthoringtool.controller;
+import gov.nist.hit.hl7.codesetauthoringtool.exception.NotFoundException;
 import gov.nist.hit.hl7.codesetauthoringtool.model.CodeDelta;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.CommitRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.TableCSVGenerator;
@@ -75,6 +76,13 @@ public class CodesetController {
         CodesetDTO codeset = codesetService.getCodeset(id, authentication.getName());
         return new ResponseEntity<>(codeset, HttpStatus.OK);
     }
+    @RequestMapping(value = "/{id}", produces = "application/json", method = RequestMethod.DELETE)
+    public ResponseMessage<?> deleteCodeset(@PathVariable String id) throws IOException, NotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        codesetService.deleteCodeset(id, authentication.getName());
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Deleted Successfully", null, null, null);
+    }
+
 
     @RequestMapping(value = "/{id}/versions/{versionId}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<CodesetVersion> getCodesetVersion(@PathVariable String id, @PathVariable String versionId) throws IOException {
@@ -85,7 +93,7 @@ public class CodesetController {
 
     @RequestMapping(value = "/{id}/versions/{versionId}", produces = "application/json", method = RequestMethod.POST)
     public ResponseMessage<?> saveCodesetVersion(@PathVariable String id, @PathVariable String versionId,
-                                                             @Valid @RequestBody CodesetVersion codesetVersion) throws IOException {
+                                                             @Valid @RequestBody CodesetVersion codesetVersion) throws IOException, NotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CodesetVersion newCodesetVersion = codesetService.saveCodesetVersion(id, versionId, codesetVersion, authentication.getName());
 //        return new ResponseEntity<>(newCodesetVersion, HttpStatus.OK);
@@ -93,7 +101,7 @@ public class CodesetController {
     }
 
     @RequestMapping(value = "/{id}/versions/{versionId}", produces = "application/json", method = RequestMethod.DELETE)
-    public ResponseMessage<?> saveCodesetVersion(@PathVariable String id, @PathVariable String versionId) throws IOException {
+    public ResponseMessage<?> deleteCodesetVersion(@PathVariable String id, @PathVariable String versionId) throws IOException, NotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         codesetService.deleteCodesetVersion(id, versionId, authentication.getName());
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Version Deleted Successfully", null, null, null);

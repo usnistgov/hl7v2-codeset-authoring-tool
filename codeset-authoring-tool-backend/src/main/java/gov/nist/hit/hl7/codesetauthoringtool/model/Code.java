@@ -19,7 +19,7 @@ public class Code {
     private String pattern;
     private Boolean hasPattern;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "codeset_version_id")
     @JsonBackReference
     private CodesetVersion codesetVersion;

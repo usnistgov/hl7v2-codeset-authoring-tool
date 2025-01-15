@@ -3,12 +3,14 @@ package gov.nist.hit.hl7.codesetauthoringtool.serviceImpl;
 import gov.nist.hit.hl7.codesetauthoringtool.dto.CodeAccessDTO;
 import gov.nist.hit.hl7.codesetauthoringtool.dto.CodesetAccessDTO;
 import gov.nist.hit.hl7.codesetauthoringtool.dto.VersionAccessDTO;
+import gov.nist.hit.hl7.codesetauthoringtool.model.ApiKey;
 import gov.nist.hit.hl7.codesetauthoringtool.model.Code;
 import gov.nist.hit.hl7.codesetauthoringtool.model.Codeset;
 import gov.nist.hit.hl7.codesetauthoringtool.model.CodesetVersion;
 import gov.nist.hit.hl7.codesetauthoringtool.repository.CodesetRepository;
 import gov.nist.hit.hl7.codesetauthoringtool.repository.CodesetVersionRepository;
 import gov.nist.hit.hl7.codesetauthoringtool.service.CodesetAccessService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,9 +31,17 @@ public class CodesetAccessServiceImpl implements CodesetAccessService {
     }
 
     @Override
-    public CodesetAccessDTO getCodeset(String id, String version, String match) throws IOException, ResponseStatusException {
+    public CodesetAccessDTO getCodeset(String id, String version, String match, String apiKey) throws IOException, ResponseStatusException {
         Codeset codeset = codesetRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CodeSet with id " + id + " not found"));
+        if(!codeset.getPublic() && apiKey == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing API key");
+        }
+        String hashedApiKey = DigestUtils.sha256Hex(apiKey);
+        System.out.println(codeset.getApiKeys());
+
+
+        ApiKey matchedKey = codeset.getApiKeys().stream().filter((c) -> c.getToken().equals(hashedApiKey)).findFirst().orElseThrow(()-> new IOException("Codeset not accessible "));;
 
         CodesetVersion targetVersion;
         CodesetVersion latestVersion = codeset.getVersions().stream().filter(v -> v.getVersion().equals(codeset.getLatestVersion())).findFirst().orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "CodeSet id " + id + " has no latest version"));
@@ -64,6 +74,9 @@ public class CodesetAccessServiceImpl implements CodesetAccessService {
         return result;
     }
 
+    public String getKeyHash(String key) {
+        return DigestUtils.sha256Hex(key);
+    }
     List<CodeAccessDTO> convertCodesToDTO(List<Code> codes){
         return  codes.stream().map(c -> new CodeAccessDTO(c.getCode(), c.getSystem(), c.getDescription(), c.getPattern(), c.getUsage(), c.getHasPattern())).toList();
     }

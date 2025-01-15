@@ -168,6 +168,7 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
           blockUI: true
         },
         alert: {
+          fromHttpResponse: true,
           mode: MessageHandlerMode.MESSAGE_RESULT_AND_ERROR
         }
 
