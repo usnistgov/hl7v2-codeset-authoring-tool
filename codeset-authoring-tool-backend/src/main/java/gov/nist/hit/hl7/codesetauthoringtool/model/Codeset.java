@@ -13,7 +13,7 @@ public class Codeset {
     private String id;
     private String name;
     private  String description;
-    private Boolean isPublic;
+    private Boolean disableKeyProtection;
     private Date dateUpdated;
     private Date dateCreated;
     @OneToMany(mappedBy = "codeset", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -39,10 +39,10 @@ public class Codeset {
         this.id = UUID.randomUUID().toString().replace("-", "");
     }
     public Codeset(){}
-    public Codeset(String name,String description, Boolean isPublic, Date dateUpdated, Date dateCreated, List<CodesetVersion> versions) {
+    public Codeset(String name,String description, Boolean disableKeyProtection, Date dateUpdated, Date dateCreated, List<CodesetVersion> versions) {
         this.name = name;
         this.description = description;
-        this.isPublic = isPublic == null ? false : isPublic;
+        this.disableKeyProtection = disableKeyProtection == null ? false : disableKeyProtection;
         this.dateUpdated = dateUpdated;
         this.dateCreated = dateCreated;
         this.versions = new ArrayList<>(versions);
@@ -77,12 +77,12 @@ public class Codeset {
         this.description = description;
     }
 
-    public Boolean getPublic() {
-        return isPublic;
+    public Boolean getDisableKeyProtection() {
+        return disableKeyProtection;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setDisableKeyProtection(Boolean disableKeyProtection) {
+        this.disableKeyProtection = disableKeyProtection;
     }
 
     public Date getDateUpdated() {

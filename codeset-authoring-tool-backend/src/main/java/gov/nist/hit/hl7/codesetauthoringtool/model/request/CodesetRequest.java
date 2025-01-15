@@ -11,18 +11,18 @@ public class CodesetRequest {
     private String name;
     private String description;
     private String version;
-    private Boolean exposed;
+    private Boolean disableKeyProtection;
     private List<Code> codes;
 
     private String latestVersion;
     public CodesetRequest() {
     }
 
-    public CodesetRequest(String name, String description, String version, Boolean exposed, List<Code> codes, String latestVersion) {
+    public CodesetRequest(String name, String description, String version, Boolean disableKeyProtection, List<Code> codes, String latestVersion) {
         this.name = name;
         this.description = description;
         this.version = version;
-        this.exposed = exposed;
+        this.disableKeyProtection = disableKeyProtection;
         this.codes = codes;
         this.latestVersion = latestVersion;
     }
@@ -51,12 +51,12 @@ public class CodesetRequest {
         this.version = version;
     }
 
-    public Boolean getExposed() {
-        return exposed;
+    public Boolean getDisableKeyProtection() {
+        return disableKeyProtection;
     }
 
-    public void setExposed(Boolean aExposed) {
-        exposed = aExposed;
+    public void setDisableKeyProtection(Boolean disableKeyProtection) {
+        this.disableKeyProtection = disableKeyProtection;
     }
 
     public List<Code> getCodes() {

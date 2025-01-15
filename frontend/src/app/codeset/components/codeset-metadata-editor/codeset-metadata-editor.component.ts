@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { DamAbstractEditorComponent, DamfEditorInitializer, ISaveResult, IStateCurrent, MessageType, UtilityService } from '@usnistgov/ngx-dam-framework';
+import { ConfirmDialogComponent, DamAbstractEditorComponent, DamfEditorInitializer, ISaveResult, IStateCurrent, MessageType, UtilityService } from '@usnistgov/ngx-dam-framework';
 import { ICodeset, ICodesetMetadata, ICodesetVersion } from '../../models/codeset';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, take, tap } from 'rxjs';
 import { CodesetService } from '../../services/codeset.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -9,7 +9,8 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { CodesetState } from '../codeset-widget/codeset-widget.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { loadCodeset } from '../../store/codeset.actions';
-
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { MatDialog } from '@angular/material/dialog';
 export const EDITOR_ID = 'TEXT_SECTION_EDITOR';
 
 export const CODESET_METADATA_EDITOR_INITIALIZER: DamfEditorInitializer<ICodesetMetadata> = (params, injector) => {
@@ -34,7 +35,9 @@ export const CODESET_METADATA_EDITOR_INITIALIZER: DamfEditorInitializer<ICodeset
     FormsModule,
     ReactiveFormsModule,
     FaIconComponent,
-    DropdownModule
+    DropdownModule,
+    InputSwitchModule,
+
   ],
   templateUrl: './codeset-metadata-editor.component.html',
   styleUrl: './codeset-metadata-editor.component.scss'
@@ -43,7 +46,7 @@ export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<I
   initialLabel?: string;
   form!: FormGroup;
   committedVersions: ICodesetVersion[] = [];
-  constructor(private codesetService: CodesetService,
+  constructor(private codesetService: CodesetService, private dialog: MatDialog,
     private utilityService: UtilityService,) {
     super({
       id: EDITOR_ID,
@@ -53,7 +56,8 @@ export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<I
     this.form = new FormGroup({
       name: new FormControl(),
       description: new FormControl(),
-      latestVersion: new FormControl()
+      latestVersion: new FormControl(),
+      disableKeyProtection: new FormControl(),
     });
 
     this.form.valueChanges.pipe(
@@ -115,5 +119,28 @@ export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<I
       })
     )
 
+  }
+
+  onToggle(event: any) {
+    if (event.checked) {
+      console.log(event)
+      const confirmDialog$ = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          action: 'Disable Key Protection',
+          question: `By enabling API access without an API key, anybody with this code sets' link will be able to read its content. If you want to protect API access with an API key, create an API key by clicking on your username in the top right corner and selecting the "API Key" menu option. Are you sure you want to enable API access without an API key?`,
+        },
+      }).afterClosed();
+      confirmDialog$.pipe(
+        take(1),
+        map((confirmed: boolean) => {
+          if (confirmed) {
+            this.form.patchValue({ disableKeyProtection: true });
+          } else {
+            this.form.patchValue({ disableKeyProtection: false });
+          }
+          return of();
+        })
+      ).subscribe();
+    }
   }
 }

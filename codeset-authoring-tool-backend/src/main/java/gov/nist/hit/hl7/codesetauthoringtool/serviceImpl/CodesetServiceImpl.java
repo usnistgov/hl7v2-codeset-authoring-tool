@@ -48,13 +48,13 @@ public class CodesetServiceImpl implements CodesetService {
         Codeset newCodeset = new Codeset(
                 codeset.getName(),
                 codeset.getDescription(),
-                codeset.getExposed(),
+                codeset.getDisableKeyProtection(),
                 new Date(),
                 new Date(),
                 new ArrayList<>()
         );
         CodesetVersion newCodesetVersion = new CodesetVersion(
-                "", codeset.getExposed(), new Date(), "unpublished", new ArrayList<>(), newCodeset
+                "", codeset.getDisableKeyProtection(), new Date(), "unpublished", new ArrayList<>(), newCodeset
         );
         if(codeset.getCodes() != null){
             for (Code code : codeset.getCodes()) {
@@ -76,7 +76,7 @@ public class CodesetServiceImpl implements CodesetService {
         existingCodeset.setName(codeset.getName());
         existingCodeset.setDescription(codeset.getDescription());
         existingCodeset.setDateUpdated(new Date());
-        existingCodeset.setPublic(codeset.getExposed());
+        existingCodeset.setDisableKeyProtection(codeset.getDisableKeyProtection());
         existingCodeset.setLatestVersion(codeset.getLatestVersion());
         Codeset updatedCodeset =  codesetRepository.save(existingCodeset);
         return  convertToDTO(updatedCodeset);
@@ -158,7 +158,7 @@ public class CodesetServiceImpl implements CodesetService {
         existingCodesetVersion.getCodes().clear();
 
         // Set the updated properties
-        existingCodesetVersion.setExposed(codesetVersion.getExposed());
+        existingCodesetVersion.setDisableKeyProtection(codesetVersion.getDisableKeyProtection());
 
         // Add the new codes and set the relationship properly
         for (Code code : codesetVersion.getCodes()) {
@@ -241,7 +241,7 @@ public class CodesetServiceImpl implements CodesetService {
 
         // Create a new CodesetVersion
         CodesetVersion newCodesetVersion = new CodesetVersion(
-                "", existingCodesetVersion.getExposed(), new Date(), "unpublished", new ArrayList<>(), codeset
+                "", existingCodesetVersion.getDisableKeyProtection(), new Date(), "unpublished", new ArrayList<>(), codeset
         );
 
         // Duplicate the codes from the latest version
@@ -431,7 +431,7 @@ public class CodesetServiceImpl implements CodesetService {
                 .map(version -> new CodesetVersionSimpleDTO(
                         version.getId(),
                         version.getVersion(),
-                        version.getExposed(),
+                        version.getDisableKeyProtection(),
                         version.getDateCreated(),
                         version.getDateCommitted(),
                         version.getStatus(),
@@ -444,7 +444,7 @@ public class CodesetServiceImpl implements CodesetService {
                 codeset.getId(),
                 codeset.getName(),
                 codeset.getDescription(),
-                codeset.getPublic(),
+                codeset.getDisableKeyProtection(),
                 codeset.getDateUpdated(),
                 codeset.getDateCreated(),
                 versions,

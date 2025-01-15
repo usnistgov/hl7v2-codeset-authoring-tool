@@ -6,7 +6,16 @@
 
   <ng-template #titleBar>
     <div class="row">
-      <h2 class="col-md-6 col-sm-12"><fa-icon icon="file" style="margin-right: 10px;"></fa-icon>{{codeset.name}}</h2>
+      <h2 class="col-md-6 col-sm-12 flex">
+        <fa-icon icon="file" style="margin-right: 10px;"></fa-icon>
+        {{codeset.name}}
+        <div style="display: flex;flex-direction: column;align-items: flex-start;justify-content: space-between;">
+          <p-badge value="API Access without API key" severity="danger" styleClass="block"></p-badge>
+          <fa-icon style="font-size: 20px;margin-left: 10px;" *ngIf="codeset.description"
+            [pTooltip]="codeset.description" tooltipPosition="bottom" icon='info-circle'></fa-icon>
+
+        </div>
+      </h2>
       <div class="col-md-6 col-sm-12">
         <app-input-copy type="text" [value]="codeSetURL" label="URL"></app-input-copy>
       </div>

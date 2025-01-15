@@ -33,28 +33,26 @@ public class CodesetAccessServiceImpl implements CodesetAccessService {
     @Override
     public CodesetAccessDTO getCodeset(String id, String version, String match, String apiKey) throws IOException, ResponseStatusException {
         Codeset codeset = codesetRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CodeSet with id " + id + " not found"));
-        if(!codeset.getPublic() && apiKey == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing API key");
+                .orElseThrow(() -> new IOException("CodeSet with id " + id + " not found"));
+        if(!codeset.getDisableKeyProtection() && apiKey == null) {
+            throw new IOException( "Missing API key");
         }
-        String hashedApiKey = DigestUtils.sha256Hex(apiKey);
-        System.out.println(codeset.getApiKeys());
-
-
-        ApiKey matchedKey = codeset.getApiKeys().stream().filter((c) -> c.getToken().equals(hashedApiKey)).findFirst().orElseThrow(()-> new IOException("Codeset not accessible "));;
-
+        if(!codeset.getDisableKeyProtection()){
+            String hashedApiKey = DigestUtils.sha256Hex(apiKey);
+            ApiKey matchedKey = codeset.getApiKeys().stream().filter((c) -> c.getToken().equals(hashedApiKey)).findFirst().orElseThrow(()-> new IOException("Codeset not accessible "));
+        }
         CodesetVersion targetVersion;
-        CodesetVersion latestVersion = codeset.getVersions().stream().filter(v -> v.getVersion().equals(codeset.getLatestVersion())).findFirst().orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "CodeSet id " + id + " has no latest version"));
+        CodesetVersion latestVersion = codeset.getVersions().stream().filter(v -> v.getVersion().equals(codeset.getLatestVersion())).findFirst().orElseThrow(()-> new IOException( "CodeSet id " + id + " has no latest version"));
         if(version != null && !version.isEmpty()){
-            targetVersion = codeset.getVersions().stream().filter(v -> v.getVersion().equals(version)).findFirst().orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "CodeSet id " + id + " with version " + version + " not found"));
+            targetVersion = codeset.getVersions().stream().filter(v -> v.getVersion().equals(version)).findFirst().orElseThrow(()-> new IOException("CodeSet id " + id + " with version " + version + " not found"));
         } else if(codeset.getLatestVersion() != null){
             targetVersion = latestVersion;
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while trying to determine latest version of code set id "+ id);
+            throw new IOException( "Error while trying to determine latest version of code set id "+ id);
         }
 
         CodesetVersion codesetVersion = codesetVersionRepository.findWithCodesById(targetVersion.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Codeset version not found or you don't have access to it."));
+                .orElseThrow(() -> new IOException("Codeset version not found or you don't have access to it."));
         List<Code> filteredCodes = new ArrayList<>();
         // Query the database for the matching codes using the repository
         if(match != null && !match.isEmpty()){

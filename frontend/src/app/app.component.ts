@@ -19,6 +19,8 @@ import {
   faDownload,
   faFile,
   faFilter,
+  faInfo,
+  faInfoCircle,
   faList,
   faMinus,
   faPencil,
@@ -71,6 +73,8 @@ export class AppComponent {
     iconLibrary.addIcons(faDownload);
     iconLibrary.addIcons(faTimes);
     iconLibrary.addIcons(faSearch);
+    iconLibrary.addIcons(faInfoCircle);
+
 
 
 

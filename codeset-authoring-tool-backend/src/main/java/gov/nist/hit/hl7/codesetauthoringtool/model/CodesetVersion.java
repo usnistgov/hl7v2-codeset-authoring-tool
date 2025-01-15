@@ -16,7 +16,7 @@ public class CodesetVersion {
     @Id
     private String id;
     private String version;
-    private Boolean exposed;
+    private Boolean disableKeyProtection;
     private Date dateCreated;
     private String status;
     private Date dateCommitted;
@@ -35,9 +35,9 @@ public class CodesetVersion {
 
     }
 
-    public CodesetVersion(String version, Boolean exposed, Date dateCreated, String status, List<Code> codes, Codeset codeset) {
+    public CodesetVersion(String version, Boolean disableKeyProtection, Date dateCreated, String status, List<Code> codes, Codeset codeset) {
         this.version = version;
-        this.exposed = exposed;
+        this.disableKeyProtection = disableKeyProtection;
         this.dateCreated = dateCreated;
         this.status = status;
         this.codes = codes;
@@ -60,12 +60,12 @@ public class CodesetVersion {
         this.version = version;
     }
 
-    public Boolean getExposed() {
-        return exposed;
+    public Boolean getDisableKeyProtection() {
+        return disableKeyProtection;
     }
 
-    public void setExposed(Boolean aExposed) {
-        exposed = aExposed;
+    public void setDisableKeyProtection(Boolean disableKeyProtection) {
+        this.disableKeyProtection = disableKeyProtection;
     }
 
     public Date getDateCreated() {

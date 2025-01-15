@@ -19,7 +19,7 @@ export interface ICodeset {
   name: string;
   description: string;
   latestVersion: string;
-  public: boolean;
+  disableKeyProtection: boolean;
   dateCreated: string;
   dateUpdated: string;
   versions: ICodesetVersion[];
@@ -30,7 +30,7 @@ export interface ICodesetVersion {
   id: string;
   version: string;
   status?: string;
-  exposed?: boolean;
+  disableKeyProtection?: boolean;
   dateCreated?: string;
   dateCommitted?: string;
   codes: ICodesetVersionCode[];

@@ -5,17 +5,17 @@ public class CodesetDTO {
     private String id;
     private String name;
     private String description;
-    private Boolean isPublic;
+    private Boolean disableKeyProtection;
     private Date dateUpdated;
     private Date dateCreated;
     private List<CodesetVersionSimpleDTO> versions;
     private String latestVersion;
 
-    public CodesetDTO(String id, String name, String description, Boolean isPublic, Date dateUpdated, Date dateCreated, List<CodesetVersionSimpleDTO> versions, String latestVersion) {
+    public CodesetDTO(String id, String name, String description, Boolean disableKeyProtection, Date dateUpdated, Date dateCreated, List<CodesetVersionSimpleDTO> versions, String latestVersion) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.isPublic = isPublic;
+        this.disableKeyProtection = disableKeyProtection;
         this.dateUpdated = dateUpdated;
         this.dateCreated = dateCreated;
         this.versions = versions;
@@ -46,12 +46,12 @@ public class CodesetDTO {
         this.description = description;
     }
 
-    public Boolean getPublic() {
-        return isPublic;
+    public Boolean getDisableKeyProtection() {
+        return disableKeyProtection;
     }
 
-    public void setPublic(Boolean aPublic) {
-        isPublic = aPublic;
+    public void setDisableKeyProtection(Boolean disableKeyProtection) {
+        this.disableKeyProtection = disableKeyProtection;
     }
 
     public Date getDateUpdated() {

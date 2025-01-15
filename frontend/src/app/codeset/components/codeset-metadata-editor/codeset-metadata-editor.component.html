@@ -15,6 +15,11 @@
     <label for="value" class="form-label">Description</label>
     <input type="text" class="form-control" id="description" placeholder="Description" formControlName="description">
   </div>
+  <div class="form-group api-key-disable">
+    <label for="description"><strong>Enable API Access without API Key Protection (Open to Public)</strong></label><br>
+    <p-inputSwitch id="disableKeyProtection" name="disableKeyProtection" formControlName="disableKeyProtection"
+      (onChange)="onToggle($event)"></p-inputSwitch>
+  </div>
 
   <div class="mb-3">
     <label for="defaultVersion" style="margin-right: 5px;"><strong>Latest Stable Version</strong></label><br>

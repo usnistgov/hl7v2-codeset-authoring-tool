@@ -10,6 +10,8 @@ import { CodesetSidebarComponent } from '../codeset-sidebar/codeset-sidebar.comp
 import { Store } from '@ngrx/store';
 import { InputCopyComponent } from '../input-copy/input-copy.component';
 import { loadCodeset } from '../../store/codeset.actions';
+import { TooltipModule } from 'primeng/tooltip';
+import { BadgeModule } from 'primeng/badge';
 
 
 export const CodesetState = new DataStateValue<ICodeset>({
@@ -52,7 +54,9 @@ export const CODESET_WIDGET_ID = 'CODESET_WIDGET_ID';
     RouterModule,
     FaIconComponent,
     CodesetSidebarComponent,
-    InputCopyComponent
+    InputCopyComponent,
+    TooltipModule,
+    BadgeModule
 
   ],
   providers: [
