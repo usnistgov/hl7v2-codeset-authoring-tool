@@ -51,22 +51,22 @@ public class DataSourceConfig {
     @Bean
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setDriverClassName(env.getProperty("driverClassName", "org.sqlite.JDBC"));
-        dataSource.setJdbcUrl(env.getProperty("url", "jdbc:sqlite:codesets.db"));
+//        dataSource.setDriverClassName(env.getProperty("driverClassName", "org.sqlite.JDBC"));
+        dataSource.setJdbcUrl(env.getProperty("url", "jdbc:postgresql://localhost:5432/postgres"));
         dataSource.setUsername(env.getProperty("username", ""));
         dataSource.setPassword(env.getProperty("password", ""));
 
-        // SQLite-specific HikariCP properties
-        dataSource.addDataSourceProperty("journal_mode", "WAL");
-        dataSource.addDataSourceProperty("synchronous", "NORMAL");
-        dataSource.addDataSourceProperty("busy_timeout", "5000");
-        dataSource.addDataSourceProperty("locking_mode", "IMMEDIATE");
-
-        // Connection pool settings
-        dataSource.setMaximumPoolSize(1);  // Single connection for writes
-        dataSource.setMinimumIdle(0);     // No idle connections
-        dataSource.setIdleTimeout(600000); // 10 minutes
-        dataSource.setMaxLifetime(1800000); // 30 minutes
+//        // SQLite-specific HikariCP properties
+//        dataSource.addDataSourceProperty("journal_mode", "WAL");
+//        dataSource.addDataSourceProperty("synchronous", "NORMAL");
+//        dataSource.addDataSourceProperty("busy_timeout", "5000");
+//        dataSource.addDataSourceProperty("locking_mode", "IMMEDIATE");
+//
+//        // Connection pool settings
+//        dataSource.setMaximumPoolSize(1);  // Single connection for writes
+//        dataSource.setMinimumIdle(0);     // No idle connections
+//        dataSource.setIdleTimeout(600000); // 10 minutes
+//        dataSource.setMaxLifetime(1800000); // 30 minutes
 
         return dataSource;
     }

@@ -9,8 +9,8 @@ import jakarta.persistence.*;
 public class ApplicationUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     @Column(unique = true)
     private String username;
@@ -20,11 +20,11 @@ public class ApplicationUser {
     private String lastName;
     private String email;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

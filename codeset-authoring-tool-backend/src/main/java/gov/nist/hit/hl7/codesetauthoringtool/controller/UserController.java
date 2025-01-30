@@ -55,7 +55,7 @@ public class UserController {
             method = RequestMethod.POST)
     public ResponseMessage<?> createNewUser(@RequestBody NewUserRequest newUserRequest) throws Exception {
         ApplicationUser newUser = userDetailsService.createUser(newUserRequest);
-        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "User created Successfully", newUser.getId(), null, newUser);
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "User created Successfully", newUser.getId().toString(), null, newUser);
 
     }
 

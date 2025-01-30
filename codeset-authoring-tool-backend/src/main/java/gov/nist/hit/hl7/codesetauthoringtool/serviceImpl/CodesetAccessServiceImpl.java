@@ -56,7 +56,20 @@ public class CodesetAccessServiceImpl implements CodesetAccessService {
         List<Code> filteredCodes = new ArrayList<>();
         // Query the database for the matching codes using the repository
         if(match != null && !match.isEmpty()){
-            filteredCodes = codesetVersionRepository.findCodesByVersionIdAndMatch(targetVersion.getId(), match);
+            List<Object[]> temp = codesetVersionRepository.findCodesByVersionIdAndMatch(targetVersion.getId(), match);
+            filteredCodes = temp.stream()
+                    .map(obj -> new Code(
+                            (String) obj[0],
+                            (String) obj[1],
+                            (String) obj[4],
+                            (String) obj[6],
+                            (String) obj[3],
+                            (String) obj[5],
+                            (Boolean) obj[2]
+
+                    ))
+                    .collect(Collectors.toList());
+//            filteredCodes = codesetVersionRepository.findCodesByVersionIdAndMatch(targetVersion.getId(), match);
         } else {
             filteredCodes = codesetVersion.getCodes();
         }

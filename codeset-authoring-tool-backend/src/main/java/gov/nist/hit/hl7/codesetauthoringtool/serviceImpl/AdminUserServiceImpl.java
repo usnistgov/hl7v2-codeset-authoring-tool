@@ -33,7 +33,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         if (existingUsers == 0) {
             String hashedPassword = passwordEncoder.encode(adminDefaultPassword);
             // Insert admin user
-            jdbcTemplate.update("INSERT INTO users (username, password) VALUES (?, ?)", adminDefaultUsername, hashedPassword);
+            jdbcTemplate.update("INSERT INTO users (id, username, password) VALUES ('1',?, ?)", adminDefaultUsername, hashedPassword);
             System.out.println("Admin user created successfully.");
         } else {
             System.out.println("Admin user already exists.");

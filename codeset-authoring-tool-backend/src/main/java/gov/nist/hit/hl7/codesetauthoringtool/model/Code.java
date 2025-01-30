@@ -39,6 +39,15 @@ public class Code {
         this.system = system;
         this.display = display;
     }
+    public Code(String id, String code, String system, String display, String pattern, String usage, Boolean hasPattern) {
+        this.id = id;
+        this.code = code;
+        this.system = system;
+        this.display = display;
+        this.pattern = pattern;
+        this.usage = usage;
+        this.hasPattern = hasPattern;
+    }
 
     public String getCode() {
         return code;

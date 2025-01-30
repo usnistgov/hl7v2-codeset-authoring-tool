@@ -78,10 +78,9 @@ export class ImportCodesDialogComponent {
     reader.onload = (e) => {
       const csv = reader.result as string;
       this.papa.parse(csv, {
-        header: true, // If you want to treat the first row as headers
+        header: true,
         skipEmptyLines: true,
         complete: (result) => {
-          console.log(result.data); // You will get the CSV data here as an array of objects
           this.codes = result.data.map(
             (c: any) => {
               return {
@@ -91,7 +90,6 @@ export class ImportCodesDialogComponent {
               }
             }
           );
-          console.log(this.codes)
           this.selectedCodes = this.codes;
           this.uploadStep = false;
           this.reviewStep = true;
