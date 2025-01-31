@@ -45,7 +45,6 @@ export class CommitCodesetVersionDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private codesetService: CodesetService,
   ) {
-    console.log(data)
     this.title = data.title || 'Code Set Version';
     this.codeSetId = data.codesetId;
     this.versionId = data.versionId;
@@ -70,7 +69,6 @@ export class CommitCodesetVersionDialogComponent {
     this.codesetService.getCodeSetDelta(this.codeSetId, this.versionId, id).pipe(
       map((delta) => {
         this.delta = delta.filter((row) => row.change !== DeltaChange.NONE);
-        console.log(this.delta);
         this.loading = false;
       }),
       catchError((error) => {

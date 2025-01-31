@@ -75,7 +75,7 @@ export class ApiKeyListComponent {
   }
 
   ngOnInit(): void {
-
+    this.utilityService.clearAlerts();
   }
   createApiKey() {
     this.router.navigate(['/api-keys/create'])

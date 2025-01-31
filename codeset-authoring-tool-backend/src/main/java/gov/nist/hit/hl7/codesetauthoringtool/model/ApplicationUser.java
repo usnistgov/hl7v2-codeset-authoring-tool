@@ -4,13 +4,15 @@ package gov.nist.hit.hl7.codesetauthoringtool.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "users")
 public class ApplicationUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
 
     @Column(unique = true)
     private String username;
@@ -20,11 +22,16 @@ public class ApplicationUser {
     private String lastName;
     private String email;
 
-    public Integer getId() {
+    @PrePersist
+    public void generateId() {
+        // This will generate a UUID and remove hyphens to get a 32-character string
+        this.id = UUID.randomUUID().toString().replace("-", "");
+    }
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

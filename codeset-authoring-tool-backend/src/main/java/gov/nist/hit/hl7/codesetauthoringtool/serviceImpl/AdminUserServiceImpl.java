@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
@@ -32,8 +33,9 @@ public class AdminUserServiceImpl implements AdminUserService {
         int existingUsers = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Integer.class);
         if (existingUsers == 0) {
             String hashedPassword = passwordEncoder.encode(adminDefaultPassword);
+            String id = UUID.randomUUID().toString().replace("-", "");
             // Insert admin user
-            jdbcTemplate.update("INSERT INTO users (id, username, password) VALUES ('1',?, ?)", adminDefaultUsername, hashedPassword);
+            jdbcTemplate.update("INSERT INTO users (id, username, password) VALUES (?,?, ?)",id, adminDefaultUsername, hashedPassword);
             System.out.println("Admin user created successfully.");
         } else {
             System.out.println("Admin user already exists.");

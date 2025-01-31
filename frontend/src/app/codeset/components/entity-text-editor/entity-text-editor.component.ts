@@ -83,7 +83,6 @@ export class EntityTextEditorComponent extends DamAbstractEditorComponent<ITextS
   override onEditorNgDestoy(): void {
   }
   override save(current: IStateCurrent<ITextSection, never>): Observable<ISaveResult<ITextSection>> {
-    console.log("Saving :", current.value);
     return of({
       success: false,
       message: {

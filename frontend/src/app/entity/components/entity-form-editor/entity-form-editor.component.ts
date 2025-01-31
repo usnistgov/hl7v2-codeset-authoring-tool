@@ -69,7 +69,6 @@ export class EntityFormEditorComponent extends DamAbstractEditorComponent<IFormS
 
   override onEditorDataUpdate(data: IStateCurrent<IFormSection, never>): void {
     if (data.initial) {
-      console.log("Initial");
       // Initialize form and metadata
       const fields: Record<string, FormControl> = {
         label: new FormControl({ value: data.value.label, disabled: false }),
@@ -179,7 +178,6 @@ export class EntityFormEditorComponent extends DamAbstractEditorComponent<IFormS
   override onEditorNgDestoy(): void {
   }
   override save(current: IStateCurrent<IFormSection, never>): Observable<ISaveResult<IFormSection>> {
-    console.log("Saving :", current.value);
     return of({
       success: false,
       message: {

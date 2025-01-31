@@ -55,7 +55,6 @@ export class CodesetBrowserDialogComponent {
     this.codesetService.getCodesetList().pipe(
       map((values) => {
         this.codesets = values;
-        console.log(this.codesets)
       })
     ).subscribe();
   }
@@ -74,7 +73,6 @@ export class CodesetBrowserDialogComponent {
 
 
   submit() {
-    console.log(this.selectedCodesets)
     this.dialogRef.close(this.selectedCodesets);
   }
 }

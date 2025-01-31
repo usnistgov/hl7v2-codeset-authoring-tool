@@ -1,8 +1,6 @@
 package gov.nist.hit.hl7.codesetauthoringtool.serviceImpl;
 
-import gov.nist.hit.hl7.codesetauthoringtool.dto.CodeAccessDTO;
-import gov.nist.hit.hl7.codesetauthoringtool.dto.CodesetAccessDTO;
-import gov.nist.hit.hl7.codesetauthoringtool.dto.VersionAccessDTO;
+import gov.nist.hit.hl7.codesetauthoringtool.dto.*;
 import gov.nist.hit.hl7.codesetauthoringtool.model.ApiKey;
 import gov.nist.hit.hl7.codesetauthoringtool.model.Code;
 import gov.nist.hit.hl7.codesetauthoringtool.model.Codeset;
@@ -85,10 +83,62 @@ public class CodesetAccessServiceImpl implements CodesetAccessService {
         return result;
     }
 
+    @Override
+    public CodesetMetadataAccessDTO getCodesetMetadata(String id, String apiKey) throws IOException, ResponseStatusException {
+        Codeset codeset = codesetRepository.findById(id)
+                .orElseThrow(() -> new IOException("CodeSet with id " + id + " not found"));
+        if(!codeset.getDisableKeyProtection() && apiKey == null) {
+            throw new IOException( "Missing API key");
+        }
+        if(!codeset.getDisableKeyProtection()){
+            String hashedApiKey = DigestUtils.sha256Hex(apiKey);
+            ApiKey matchedKey = codeset.getApiKeys().stream().filter((c) -> c.getToken().equals(hashedApiKey)).findFirst().orElseThrow(()-> new IOException("Codeset not accessible "));
+        }
+
+        return convertCodesetToMetadataDTO(codeset);
+
+    }
+    @Override
+    public CodesetVersionMetadataAccessDTO getCodesetVersionMetadata(String id, String version, String apiKey) throws IOException, ResponseStatusException{
+        Codeset codeset = codesetRepository.findById(id)
+                .orElseThrow(() -> new IOException("CodeSet with id " + id + " not found"));
+        if(!codeset.getDisableKeyProtection() && apiKey == null) {
+            throw new IOException( "Missing API key");
+        }
+        if(!codeset.getDisableKeyProtection()){
+            String hashedApiKey = DigestUtils.sha256Hex(apiKey);
+            ApiKey matchedKey = codeset.getApiKeys().stream().filter((c) -> c.getToken().equals(hashedApiKey)).findFirst().orElseThrow(()-> new IOException("Codeset not accessible "));
+        }
+        CodesetVersion codesetVersion = codeset.getVersions().stream().filter(v -> v.getVersion().equals(version)).findFirst().orElseThrow(()-> new IOException("Codeset version not found "));
+        CodesetVersionMetadataAccessDTO result = new CodesetVersionMetadataAccessDTO();
+        result.setId(id);
+        result.setVersion(version);
+        result.setName(codeset.getName());
+        result.setDate(codesetVersion.getDateCommitted());
+        result.setNumberOfCodes(codesetVersion.getCodes().size());
+        return result;
+
+    }
     public String getKeyHash(String key) {
         return DigestUtils.sha256Hex(key);
     }
     List<CodeAccessDTO> convertCodesToDTO(List<Code> codes){
         return  codes.stream().map(c -> new CodeAccessDTO(c.getCode(), c.getSystem(), c.getDescription(), c.getPattern(), c.getUsage(), c.getHasPattern())).toList();
+    }
+
+    CodesetMetadataAccessDTO convertCodesetToMetadataDTO(Codeset codeset) throws IOException {
+        CodesetMetadataAccessDTO result = new CodesetMetadataAccessDTO();
+        CodesetVersion latestVersion = codeset.getVersions().stream().filter(v -> v.getVersion().equals(codeset.getLatestVersion())).findFirst().orElseThrow(()-> new IOException( "CodeSet id " + codeset.getId() + " has no latest version"));
+        List<VersionAccessDTO> codesetVersionsDTO = convertVersionsToDTO(codeset.getVersions());
+        result.setId(codeset.getId());
+        result.setName(codeset.getName());
+        result.setLatestStableVersion(new VersionAccessDTO(latestVersion.getVersion(), latestVersion.getDateCommitted()));
+        result.setVersions(codesetVersionsDTO);
+        return result;
+    }
+    List<VersionAccessDTO> convertVersionsToDTO(List<CodesetVersion> versions){
+        return versions.stream().filter(v -> v.getDateCommitted() != null)
+                .map(c -> new VersionAccessDTO(c.getVersion(), c.getDateCommitted()))
+                .collect(Collectors.toList());
     }
 }

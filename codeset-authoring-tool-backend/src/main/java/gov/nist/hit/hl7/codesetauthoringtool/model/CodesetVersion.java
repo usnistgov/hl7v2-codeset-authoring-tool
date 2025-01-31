@@ -44,6 +44,17 @@ public class CodesetVersion {
         this.codeset = codeset;
     }
 
+    public CodesetVersion(String version, Boolean disableKeyProtection, Date dateCreated, String status, Date dateCommitted, String comments, List<Code> codes, Codeset codeset) {
+        this.version = version;
+        this.disableKeyProtection = disableKeyProtection;
+        this.dateCreated = dateCreated;
+        this.status = status;
+        this.dateCommitted = dateCommitted;
+        this.comments = comments;
+        this.codes = codes;
+        this.codeset = codeset;
+    }
+
     public String getId() {
         return id;
     }

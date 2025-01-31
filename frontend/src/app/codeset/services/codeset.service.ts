@@ -38,6 +38,9 @@ export class CodesetService {
   deleteCodeset(codesetId: string): Observable<IMessage<ICodeset>> {
     return this.http.delete<IMessage<ICodeset>>(`${this.CODESET_END_POINT}${codesetId}`);
   }
+  cloneCodeset(codesetId: string): Observable<IMessage<ICodeset>> {
+    return this.http.post<IMessage<ICodeset>>(`${this.CODESET_END_POINT}${codesetId}/clone`, {});
+  }
   deleteCodesetVersion(codesetId: string, codesetVersionId: string): Observable<IMessage<ICodeset>> {
     return this.http.delete<IMessage<ICodeset>>(`${this.CODESET_END_POINT}${codesetId}/versions/${codesetVersionId}`);
   }

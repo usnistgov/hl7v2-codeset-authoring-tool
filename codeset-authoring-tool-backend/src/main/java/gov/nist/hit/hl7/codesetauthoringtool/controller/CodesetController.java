@@ -42,7 +42,7 @@ public class CodesetController {
     }
 
     @RequestMapping(value = "/", produces = "application/json", method = RequestMethod.POST)
-    public ResponseEntity<Codeset> createCodeset(@Valid @RequestBody CodesetRequest request) throws IOException {
+    public ResponseEntity<Codeset> createCodeset(@Valid @RequestBody CodesetRequest request) throws IOException, NotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Codeset newCodeset = this.codesetService.createCodeset(request, authentication.getName());
         return new ResponseEntity<>(newCodeset, HttpStatus.CREATED);
@@ -81,6 +81,13 @@ public class CodesetController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         codesetService.deleteCodeset(id, authentication.getName());
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Deleted Successfully", null, null, null);
+    }
+
+    @RequestMapping(value = "/{id}/clone", produces = "application/json", method = RequestMethod.POST)
+    public ResponseMessage<?> cloneCodeset(@PathVariable String id) throws IOException, NotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Codeset cloned = codesetService.cloneCodeset(id, authentication.getName());
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Cloned Successfully", cloned.getId(), null, null);
     }
 
 

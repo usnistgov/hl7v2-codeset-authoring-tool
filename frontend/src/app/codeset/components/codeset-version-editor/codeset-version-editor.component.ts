@@ -75,7 +75,6 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
     this.store.select(selectRouteParams).pipe(
       take(1),
       map((params: Record<string, string>) => {
-        console.log(params)
         const host = window.location.protocol + '//' + window.location.host;
         this.versionURL = host + '/codesets/' + params['codesetId'] + '/versions/' + params['versionId'];
         this.codeSetURL = host + '/codesets/' + params['codesetId']
@@ -93,7 +92,6 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
   }
 
   public update(event: { codes: ICodesetVersionCode[], valid: boolean | null }): void {
-    console.log(event)
     this.state.change({
       timestamp: new Date(),
       validation: {
@@ -141,11 +139,6 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
           .pipe(
             mergeMap((res) => {
               if (res) {
-                console.log(res);
-                // resource.version = res.version;
-                // resource.comments = res.comments;
-                // resource.latest = res.latest;
-                // this.saveAndUpdate(parent, resource);
                 return this.commit(res);
               }
               return of();
@@ -198,7 +191,6 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
   }
   override save(current: IStateCurrent<ICodesetVersion, never>): Observable<ISaveResult<ICodesetVersion>> {
 
-    console.log("Saving :", current);
     return this.store.select(selectRouteParams).pipe(
       take(1),
       mergeMap((params: Record<string, string>) => {
@@ -226,7 +218,6 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
     this.dialog.open(ImportCodesDialogComponent, {
     }).afterClosed().subscribe({
       next: (codes: ICodesetVersionCode[]) => {
-        console.log(codes);
         if (codes) {
           this.update({ codes, valid: true });
         }
@@ -235,7 +226,6 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
   }
 
   exportCSV($event: ICodesetVersion) {
-    console.log("--")
     // this.codesetService.exportCSV($event.id);
     this.store.select(selectRouteParams).pipe(
       take(1),

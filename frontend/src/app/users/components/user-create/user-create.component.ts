@@ -53,6 +53,10 @@ export class UserCreateComponent {
     this.utilityService.useLoaderWithErrorAlert(
       this.userService.createUser(this.form.value),
       {
+        message: {
+          fromHttpResponse: true,
+          tags: ['CREATE_ENTITY_ISSUES']
+        },
         loader: {
           blockUI: true
         }

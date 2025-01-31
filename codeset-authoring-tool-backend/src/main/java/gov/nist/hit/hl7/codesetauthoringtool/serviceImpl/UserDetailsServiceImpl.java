@@ -56,20 +56,24 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public ApplicationUser createUser(NewUserRequest newUser) throws IOException {
+        try {
+            if (userRepository.findByUsername(newUser.getUsername()).isPresent()) {
+                throw new IOException("Username " + newUser.getUsername() + " already exists. Please use a different one.");
+            }
+            String hashedPassword = passwordEncoder.encode(newUser.getPassword());
+            ApplicationUser user = new ApplicationUser();
+            user.setUsername(newUser.getUsername());
+            user.setPassword(hashedPassword);
+            user.setFirstName(newUser.getFirstName());
+            user.setLastName(newUser.getLastName());
+            userRepository.save(user);
 
-        if (userRepository.findByUsername(newUser.getUsername()).isPresent()) {
-            throw new IOException("Username " + newUser.getUsername() + " already exists. Please use a different one.");
+            return user;
+        } catch (Exception e) {
+            System.out.println("Error creating user: " + e.getMessage());
+            throw new IOException("Error creating user");
         }
-        String hashedPassword = passwordEncoder.encode(newUser.getPassword());
 
-        ApplicationUser user = new ApplicationUser();
-        user.setUsername(newUser.getUsername());
-        user.setPassword(hashedPassword);
-        user.setFirstName(newUser.getFirstName());
-        user.setLastName(newUser.getLastName());
-        userRepository.save(user);
-
-        return user;
     }
     public void deleteUser(String id) throws IOException {
         ApplicationUser user = this.userRepository.findById(id).orElseThrow(() -> new IOException("User not found."));

@@ -58,7 +58,6 @@ export class CodesetSidebarComponent {
         label: "Delete",
         icon: 'trash-can',
         command: (event) => {
-          console.log(event)
           this.deleteCodeSetVersion()
         }
 

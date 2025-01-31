@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import {
   AlertService,
   ConfirmDialogComponent,
+  DamAlertsContainerComponent,
   DataStateRepository,
   IListItemControl,
   ListWidgetComponent,
@@ -11,7 +12,7 @@ import {
   UtilityService,
 } from '@usnistgov/ngx-dam-framework';
 import { Store } from '@ngrx/store';
-import { map, of, skip, switchMap, take, tap, throwError } from 'rxjs';
+import { map, mergeMap, of, skip, switchMap, take, tap, throwError } from 'rxjs';
 import { ICodesetDescriptor } from '../../models/codeset';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -47,6 +48,7 @@ export const CodesetListState = new DataStateRepository<ICodesetDescriptor>({
     RouterLink,
     RouterLinkActive,
     FormsModule,
+    DamAlertsContainerComponent
   ],
   templateUrl: './codeset-list.component.html',
   styleUrl: './codeset-list.component.scss',
@@ -69,6 +71,17 @@ export class CodesetListComponent {
       },
     },
     {
+      key: 'clone',
+      label: 'Clone',
+      btnClass: 'btn btn-sm btn-success ml-1',
+      iconClass: 'bi bi-enter',
+      disabled: () => false,
+      hidden: () => false,
+      onClick: (item: ICodesetDescriptor) => {
+        this.cloneCodeSet(item);
+      },
+    },
+    {
       key: 'delete',
       label: 'Delete',
       btnClass: 'btn btn-sm btn-danger ml-1',
@@ -79,6 +92,7 @@ export class CodesetListComponent {
         this.deleteCodeSet(item);
       },
     },
+
   ];
   sort: (
     field: string | undefined,
@@ -138,9 +152,12 @@ export class CodesetListComponent {
     private codesetService: CodesetService,
     private dialog: MatDialog,
     private utilityService: UtilityService,
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
+    this.utilityService.clearAlerts();
     this.routeSnapshot.queryParams
       .pipe(
         skip(1),
@@ -167,7 +184,7 @@ export class CodesetListComponent {
 
     confirmDialog$.pipe(
       take(1),
-      map((confirmed: boolean) => {
+      mergeMap((confirmed: boolean) => {
         if (confirmed) {
           return this.utilityService.use(
             this.codesetService.deleteCodeset(item.id),
@@ -182,20 +199,47 @@ export class CodesetListComponent {
 
             }
           ).pipe(
-            map(res => {
+            mergeMap(res => {
               console.log(res)
-              // CodesetState.getOneValue(this.store).pipe(
-              //   take(1),
-              //   map((codeset) => {
-              //     this.store.dispatch(loadCodeset({ codesetId: codeset.id, redirect: true }));
-
-              //   })
-              // ).subscribe()
+              return this.codesetService.getCodesetList().pipe(
+                tap((values) => {
+                  CodesetListState.setValue(this.store, values);
+                })
+              )
             })
-          ).subscribe()
+          )
         }
         return of();
       })
     ).subscribe();
   }
+
+  cloneCodeSet(item: ICodesetDescriptor) {
+    this.utilityService.use(
+      this.codesetService.cloneCodeset(item.id),
+      {
+        loader: {
+          blockUI: true
+        },
+        alert: {
+          fromHttpResponse: true,
+          mode: MessageHandlerMode.MESSAGE_RESULT_AND_ERROR
+        }
+
+      }
+    ).pipe(
+      map(res => {
+        console.log(res)
+        this.router.navigate(['/', 'codesets', res.resourceId, 'dashboard']);
+        // CodesetState.getOneValue(this.store).pipe(
+        //   take(1),
+        //   map((codeset) => {
+        //     this.store.dispatch(loadCodeset({ codesetId: codeset.id, redirect: true }));
+
+        //   })
+        // ).subscribe()
+      })
+    ).subscribe()
+  }
+
 }

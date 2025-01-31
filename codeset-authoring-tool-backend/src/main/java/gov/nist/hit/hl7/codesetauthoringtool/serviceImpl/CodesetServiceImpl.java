@@ -39,9 +39,9 @@ public class CodesetServiceImpl implements CodesetService {
 
     @Override
     @Transactional
-    public Codeset createCodeset(CodesetRequest codeset, String username) throws IOException {
-        if (codesetRepository.findByName(codeset.getName()).isPresent()) {
-            throw new IOException("Codeset already exists");
+    public Codeset createCodeset(CodesetRequest codeset, String username) throws IOException, NotFoundException {
+        if (codeset.getName() == null || codeset.getName().isEmpty()) {
+            throw new IOException("Name is required");
         }
         ApplicationUser owner = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
@@ -135,6 +135,54 @@ public class CodesetServiceImpl implements CodesetService {
         Codeset codeset = codesetRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Codeset not found or you don't have access to it."));
         this.codesetRepository.deleteById(id);
+    }
+    @Override
+    public Codeset cloneCodeset(String id, String username) throws IOException, NotFoundException {
+        ApplicationUser owner = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found with username: " + username));
+
+        Codeset codeset = codesetRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Codeset not found or you don't have access to it."));
+
+        Codeset clonedCodeset = new Codeset(
+                "[Clone] "+codeset.getName(),
+                codeset.getDescription(),
+                false,
+                new Date(),
+                new Date(),
+                new ArrayList<>()
+        );
+        clonedCodeset.setLatestVersion(codeset.getLatestVersion());
+        clonedCodeset.setOwner(owner);
+        clonedCodeset = codesetRepository.save(clonedCodeset);
+        for (CodesetVersion codesetVersion : codeset.getVersions()) {
+            CodesetVersion clonedCodesetVersion = new CodesetVersion(
+                    codesetVersion.getVersion(), false, codesetVersion.getDateCreated(),
+                    codesetVersion.getStatus(),codesetVersion.getDateCommitted(),codesetVersion.getComments(), new ArrayList<>(), clonedCodeset
+            );
+
+
+            // Duplicate the codes from the latest version
+            for (Code code : codesetVersion.getCodes()) {
+                Code newCode = new Code();
+                newCode.setCode(code.getCode());
+                newCode.setCodesetVersion(clonedCodesetVersion);
+                newCode.setHasPattern(code.getHasPattern());
+                newCode.setPattern(code.getPattern());
+                newCode.setDescription(code.getDescription());
+                newCode.setSystem(code.getSystem());
+                newCode.setUsage(code.getUsage());
+                newCode.setComments(code.getComments());
+                clonedCodesetVersion.getCodes().add(newCode);
+            }
+            clonedCodeset.getVersions().add(clonedCodesetVersion);
+            // Save the Codeset with the new version
+            codesetVersionRepository.save(clonedCodesetVersion);
+        }
+        codesetRepository.save(clonedCodeset);
+        return clonedCodeset;
+
+
     }
     @Override
     public CodesetVersion getCodesetVersion(String id, String versionId, String username) throws IOException {

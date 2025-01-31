@@ -75,6 +75,7 @@ export class UsersListComponent {
   }
 
   ngOnInit(): void {
+    this.utilityService.clearAlerts();
   }
   createUser() {
     this.router.navigate(['/users/create'])
@@ -94,7 +95,6 @@ export class UsersListComponent {
           }
         ).pipe(
           tap((message) => {
-            console.log("--")
             this.store.dispatch(loadUsers());
           }),
         ).subscribe();

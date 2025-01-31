@@ -98,9 +98,7 @@ export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<I
 
     return this.codesetService.updateCodeset(current.value, current.value.id).pipe(
       map((res) => {
-        console.log(res.data)
         if (res.data) {
-          // CodesetState.setValue(this.store, res.data as ICodeset)
           this.store.dispatch(loadCodeset({ codesetId: res.data.id, redirect: false }));
         }
 
@@ -123,7 +121,6 @@ export class CodesetMetadataEditorComponent extends DamAbstractEditorComponent<I
 
   onToggle(event: any) {
     if (event.checked) {
-      console.log(event)
       const confirmDialog$ = this.dialog.open(ConfirmDialogComponent, {
         data: {
           action: 'Disable Key Protection',
