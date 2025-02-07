@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Inject, Input, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogContent, MatDialogTitle, MatDialogActions, MatDialogClose } from "@angular/material/dialog";
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ICodesetVersion, ICodesetVersionCode } from '../../models/codeset';
 import { Guid } from 'guid-typescript';
 import { TableModule } from 'primeng/table';
@@ -16,10 +15,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
     TableModule,
     MultiSelectModule,
     DropdownModule,

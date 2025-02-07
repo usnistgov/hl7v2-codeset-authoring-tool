@@ -1,11 +1,10 @@
-import { Component, computed, Signal, signal, WritableSignal } from '@angular/core';
-import { DamAbstractEditorComponent, DamfEditorInitializer, DataStateValue, ISaveResult, IStateCurrent, MessageHandlerMode, MessageType, selectRouteParams, UtilityService } from '@usnistgov/ngx-dam-framework';
-import { catchError, combineLatest, flatMap, map, mergeMap, Observable, of, take, tap } from 'rxjs';
+import { Component, signal, WritableSignal } from '@angular/core';
+import { DamAbstractEditorComponent, DamfEditorInitializer, ISaveResult, IStateCurrent, MessageHandlerMode, MessageType, selectRouteParams, UtilityService } from '@usnistgov/ngx-dam-framework';
+import { catchError, combineLatest, map, mergeMap, Observable, of, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatDialog } from "@angular/material/dialog";
-import { AddFieldDialogComponent } from '../add-field-dialog/add-field-dialog.component';
 import { CodesetService } from '../../services/codeset.service';
 import { ICodesetVersion, ICodesetVersionCode, ICodesetVersionCommit } from '../../models/codeset';
 import { CommitCodesetVersionDialogComponent } from '../commit-codeset-version-dialog/commit-codeset-version-dialog.component';

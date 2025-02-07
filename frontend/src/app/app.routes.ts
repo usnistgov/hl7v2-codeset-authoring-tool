@@ -3,26 +3,8 @@ import { HomeComponent } from './core/components/home/home.component';
 import { damfRouteConfig, LoginComponent } from '@usnistgov/ngx-dam-framework';
 import { RegisterComponent } from './core/components/register/register.component';
 import { ForgotPasswordComponent } from './core/components/forgot-password/forgot-password.component';
-import {
-  EntityListComponent,
-  EntityListState,
-} from './entity/components/entity-list/entity-list.component';
 import { ErrorPageComponent } from './core/components/error-page/error-page.component';
-import {
-  ENTITY_WIDGET_ID,
-  EntityState,
-  EntityWidgetComponent,
-  SectionLinkDisplayState,
-} from './entity/components/entity-widget/entity-widget.component';
-import {
-  EntityTextEditorComponent,
-  SECTION_TEXT_EDITOR_INITIALIZER,
-} from './entity/components/entity-text-editor/entity-text-editor.component';
-import { EntityCreateComponent } from './entity/components/entity-create/entity-create.component';
-import {
-  EntityFormEditorComponent,
-  SECTION_FORM_EDITOR_INITIALIZER,
-} from './entity/components/entity-form-editor/entity-form-editor.component';
+
 import {
   CodesetListComponent,
   CodesetListState,
@@ -105,7 +87,7 @@ export const routes: Routes = [
             component: CodesetWidgetComponent,
           })
           .useAuthenticated()
-          .useLoadManyData([CodesetState, CodesetVersionsState, SectionLinkDisplayState])
+          .useLoadManyData([CodesetState, CodesetVersionsState])
           .useErrorURL(DEFAULT_ERROR_URL)
           .useMessaging({})
           .withChildren([
@@ -135,32 +117,7 @@ export const routes: Routes = [
                 .useMessaging({})
                 .build(),
             },
-            {
-              path: 'text/:textSectionId',
-              ...damfRouteConfig()
-                .useAuthenticated()
-                .useEditor({
-                  component: EntityTextEditorComponent,
-                  initializer: SECTION_TEXT_EDITOR_INITIALIZER,
-                  saveOnRouteExit: true,
-                })
-                .useErrorURL(DEFAULT_ERROR_URL)
-                .useMessaging({})
-                .build(),
-            },
-            {
-              path: 'form/:formSectionId',
-              ...damfRouteConfig()
-                .useAuthenticated()
-                .useEditor({
-                  component: EntityFormEditorComponent,
-                  initializer: SECTION_FORM_EDITOR_INITIALIZER,
-                  saveOnRouteExit: true,
-                })
-                .useErrorURL(DEFAULT_ERROR_URL)
-                .useMessaging({})
-                .build(),
-            },
+
           ]),
       },
     ],

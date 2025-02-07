@@ -21,17 +21,6 @@ public interface CodesetVersionRepository extends JpaRepository<CodesetVersion, 
     @EntityGraph(attributePaths = {"codes"})
     Optional<CodesetVersion> findWithCodesById(String id);
 
-//    @Query("SELECT c FROM Code c WHERE c.codesetVersion.id = :codesetVersionId AND (:match IS NULL OR c.code = :match)")
-//@Query(value = """
-//    SELECT c
-//    FROM "codes" c
-//    WHERE c.codeset_version.id = :codesetVersionId
-//      AND (
-//        (:match IS NULL OR c.code = :match)
-//        OR (c.hasPattern = true AND FUNCTION('REGEXP', c.pattern, COALESCE(:match, '')) = 1)
-//      )
-//""", nativeQuery = true)
-//    List<Code> findCodesByVersionIdAndMatch(@Param("codesetVersionId") String codesetVersionId, @Param("match") String match);
 @Query(value = """
     SELECT c.id, c.code, c.has_pattern, c.pattern, c.system, c.usage, c.display
     FROM "codes" c 

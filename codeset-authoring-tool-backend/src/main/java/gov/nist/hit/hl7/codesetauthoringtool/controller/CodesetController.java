@@ -53,7 +53,6 @@ public class CodesetController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CodesetDTO updatedCodeset = this.codesetService.updateCodeset(id, request, authentication.getName());
-//        return new ResponseEntity<>(newCodeset, HttpStatus.CREATED);
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Saved Successfully", updatedCodeset.getId(), null, updatedCodeset);
 
     }
@@ -103,7 +102,6 @@ public class CodesetController {
                                                              @Valid @RequestBody CodesetVersion codesetVersion) throws IOException, NotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CodesetVersion newCodesetVersion = codesetService.saveCodesetVersion(id, versionId, codesetVersion, authentication.getName());
-//        return new ResponseEntity<>(newCodesetVersion, HttpStatus.OK);
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Version Saved Successfully", newCodesetVersion.getId(), null, newCodesetVersion);
     }
 

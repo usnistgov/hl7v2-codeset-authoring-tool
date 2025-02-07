@@ -67,7 +67,6 @@ public class CodesetAccessServiceImpl implements CodesetAccessService {
 
                     ))
                     .collect(Collectors.toList());
-//            filteredCodes = codesetVersionRepository.findCodesByVersionIdAndMatch(targetVersion.getId(), match);
         } else {
             filteredCodes = codesetVersion.getCodes();
         }

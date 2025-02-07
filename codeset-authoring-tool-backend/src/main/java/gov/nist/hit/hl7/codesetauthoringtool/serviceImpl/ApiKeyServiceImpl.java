@@ -31,7 +31,6 @@ public class ApiKeyServiceImpl implements ApiKeyService {
     @Override
     public List<ApiKeyDTO> getAllApiKeys() throws IOException {
 
-//        return this.apiKeyRepository.findAll().stream().toList();
         return apiKeyRepository.findAll().stream()
                 .map(this::convertToApiKeyDTO) // Map each ApiKey to ApiKeyDTO
                 .collect(Collectors.toList());

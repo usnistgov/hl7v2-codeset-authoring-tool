@@ -29,11 +29,6 @@ import { MatDialog } from '@angular/material/dialog';
 export const CodesetListState = new DataStateRepository<ICodesetDescriptor>({
   name: 'codesetList', // unique name for this state variable
   routeLoader: (params, injector, state) => {
-    // Hint (Error) : to throw an error while loading the state return an error observable with the error IMessage
-    // return throwError(() => ({
-    //   status: MessageType.FAILED,
-    //   text: 'Could not load entity list',
-    // }));
     const codeset = injector.get(CodesetService);
     return codeset.getCodesetList();
   },
@@ -45,8 +40,7 @@ export const CodesetListState = new DataStateRepository<ICodesetDescriptor>({
   imports: [
     CommonModule,
     ListWidgetComponent,
-    RouterLink,
-    RouterLinkActive,
+
     FormsModule,
     DamAlertsContainerComponent
   ],

@@ -35,7 +35,6 @@ public class ApiKeyController {
     public ResponseMessage<GeneratedApiKey> createApiKey(@Valid @RequestBody ApiKeyRequest request) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         GeneratedApiKey newApiKey = this.apiKeyService.createApiKey(request, authentication.getName());
-//        return new ResponseEntity<>(newApiKey, HttpStatus.CREATED);
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Api Key created Successfully", newApiKey.getId(), null, newApiKey);
 
     }

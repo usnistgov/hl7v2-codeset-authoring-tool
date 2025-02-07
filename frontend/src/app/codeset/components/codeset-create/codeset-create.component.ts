@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { AlertService, DamAlertsContainerComponent, MessageType, UtilityService } from '@usnistgov/ngx-dam-framework';
+import { AlertService, DamAlertsContainerComponent, UtilityService } from '@usnistgov/ngx-dam-framework';
 import { Store } from '@ngrx/store';
 import { CodesetService } from '../../services/codeset.service';
 import { tap } from 'rxjs';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BlockUI } from 'ng-block-ui';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-entity-create',
+  selector: 'app-codeset-create',
   standalone: true,
   imports: [
     DamAlertsContainerComponent,

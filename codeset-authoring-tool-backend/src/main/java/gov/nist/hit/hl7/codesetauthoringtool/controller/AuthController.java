@@ -52,7 +52,6 @@ public class AuthController {
     @RequestMapping(value = "/status", produces = "application/json",
             method = RequestMethod.GET)
     public ResponseEntity<AuthUser> checkAuthStatus(@AuthenticationPrincipal UserDetails userDetails, HttpServletResponse response) throws Exception {
-        // Set the cookies and return the user
         try {
             return ResponseEntity.ok(new AuthUser(userDetails.getUsername(), true, new ArrayList<>()));
         } catch (Exception e) {

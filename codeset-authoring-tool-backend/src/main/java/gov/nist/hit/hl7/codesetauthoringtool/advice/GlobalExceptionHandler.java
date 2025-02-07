@@ -18,19 +18,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseMessage handleException(Exception e) {
-        // You can add more logic here to customize the response based on the exception type
         e.printStackTrace();
-//        return  new ErrorResponse("Error");
-//        return  new ResponseMessage<>(ResponseMessage.Status.FAILED, ex.getMessage());
         return new ResponseMessage<>(ResponseMessage.Status.FAILED, e.getMessage(), e.getMessage(), new Date());
-
-//        return new ResponseEntity<>("An error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ResponseBody
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseMessage handleNoHandlerFoundException(NoHandlerFoundException ex) {
-//        return new ResponseEntity<>("API endpoint not found", HttpStatus.NOT_FOUND);
         return  new ResponseMessage<>(ResponseMessage.Status.FAILED, "API endpoint not found");
     }
 
@@ -38,7 +32,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseMessage notFoundException(NotFoundException ex) {
-//        return  new ErrorResponse(ex.getMessage());
         return  new ResponseMessage<>(ResponseMessage.Status.FAILED, ex.getMessage());
 
     }

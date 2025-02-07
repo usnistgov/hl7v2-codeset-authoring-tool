@@ -30,11 +30,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 export const UsersListState = new DataStateRepository<IUser>({
   name: 'userList', // unique name for this state variable
   routeLoader: (params, injector, state) => {
-    // Hint (Error) : to throw an error while loading the state return an error observable with the error IMessage
-    // return throwError(() => ({
-    //   status: MessageType.FAILED,
-    //   text: 'Could not load entity list',
-    // }));
+
     const user = injector.get(UserService);
     return user.getUsersList();
   },
@@ -45,9 +41,6 @@ export const UsersListState = new DataStateRepository<IUser>({
   standalone: true,
   imports: [
     CommonModule,
-    ListWidgetComponent,
-    RouterLink,
-    RouterLinkActive,
     FormsModule,
     TableModule,
     FaIconComponent,

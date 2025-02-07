@@ -9,7 +9,6 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { CodesetSidebarComponent } from '../codeset-sidebar/codeset-sidebar.component';
 import { Store } from '@ngrx/store';
 import { InputCopyComponent } from '../input-copy/input-copy.component';
-import { loadCodeset } from '../../store/codeset.actions';
 import { TooltipModule } from 'primeng/tooltip';
 import { BadgeModule } from 'primeng/badge';
 
@@ -19,16 +18,12 @@ export const CodesetState = new DataStateValue<ICodeset>({
   routeLoader: (params, injector) => {
     const dataService = injector.get(CodesetService);
     return dataService.getCodeset(params['codesetId']);
-    // const store = injector.get(Store);
-    // return store.dispatch(loadCodeset({ codesetId: params['codesetId'] }));
   }
 });
 
 export const CodesetVersionsState = new DataStateRepository<ICodesetVersion>({
   name: 'codesetVersions',
   routeLoader: (params, injector) => {
-    // const dataService = injector.get(CodesetService);
-    // return dataService.getSectionLinkDisplayForEntity(params['codesetId']);
     const store = injector.get(Store);
 
     return CodesetState.getOneValue(store).pipe(

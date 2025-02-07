@@ -36,13 +36,6 @@ public class SecurityConfig {
         http.exceptionHandling((exception) -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         http.csrf(csrf -> csrf.disable())
-//                .authorizeRequests().requestMatchers("/api/auth/v1/login").permitAll()
-//                .requestMatchers("/api/auth/v1/register").permitAll()
-//                .requestMatchers("/api/password/**").permitAll()
-//                .requestMatchers("/api/users").permitAll()
-//                .requestMatchers("/api/user/**").permitAll()
-//                .requestMatchers("/api/**").fullyAuthenticated()
-//                .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/v1/login","/api/auth/v1/logout","/api/auth/v1/status").permitAll() // Permit all requests to login endpoint
                 )

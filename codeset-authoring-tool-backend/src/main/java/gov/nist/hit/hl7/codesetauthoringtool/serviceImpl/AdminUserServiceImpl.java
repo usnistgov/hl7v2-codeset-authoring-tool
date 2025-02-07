@@ -29,12 +29,10 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
     @PostConstruct
     public void createAdminUser() {
-        // Check for existing users
         int existingUsers = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Integer.class);
         if (existingUsers == 0) {
             String hashedPassword = passwordEncoder.encode(adminDefaultPassword);
             String id = UUID.randomUUID().toString().replace("-", "");
-            // Insert admin user
             jdbcTemplate.update("INSERT INTO users (id, username, password) VALUES (?,?, ?)",id, adminDefaultUsername, hashedPassword);
             System.out.println("Admin user created successfully.");
         } else {

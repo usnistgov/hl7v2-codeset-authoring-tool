@@ -1,6 +1,8 @@
 @use '@angular/material' as mat;
 @include mat.core();
 @import './variables.scss';
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/bootstrap-icons/font/bootstrap-icons.min.css';
 
 html {
   height: 100%;
