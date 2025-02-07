@@ -12,9 +12,8 @@
             align-items: center;
           ">
           <div style="margin-left: 0px; display: flex; align-items: center">
-            <p-multiSelect [(ngModel)]="selectedColumns" [options]="cols" [style]="{ minWidth: '300px' }"
-              defaultLabel="Choose Columns" id="columns" name="columns" optionLabel="header"
-              selectedItemsLabel="{0} columns selected"></p-multiSelect>
+            <p-multiSelect [(ngModel)]="selectedColumns" [options]="cols" [style]="{ minWidth: '300px' }" id="columns"
+              name="columns" optionLabel="header" selectedItemsLabel="{0} columns selected"></p-multiSelect>
             <div *ngIf="!viewOnly" style="margin-left: 10px; padding-left: 10px; border-left: 2px solid;">
               <div ngbDropdown placement="bottom-right" container="body" class="d-inline-block"
                 style="margin-right:5px;">
@@ -114,7 +113,7 @@
             <div *ngSwitchCase="'usage'">
               <p-dropdown (onChange)="changeCodes()" [(ngModel)]="rowData.usage" [appendTo]="'body'"
                 [id]="'usage' + rowData.id" [name]="'usage' + rowData.id" [options]="codeUsageOptions"
-                placeholder="usage" [style]="{ minWidth: '90%' }"></p-dropdown>
+                placeholder="Usage" [style]="{ minWidth: '90%' }"></p-dropdown>
             </div>
 
             <div *ngSwitchCase="'pattern'" style="
@@ -147,7 +146,7 @@
                 <div class="dropdown-column">
                   <p-dropdown [(ngModel)]="rowData.system" [appendTo]="'body'" [id]="'system' + rowData.id"
                     [name]="'system' + rowData.id" [options]="codeSystemOptions" [readonly]="viewOnly"
-                    placeholder="usage" [style]="{ width: '100%'}" [autoZIndex]="true" required></p-dropdown>
+                    placeholder="Code system" [style]="{ width: '100%'}" required></p-dropdown>
                   <div *ngIf="form.controls['system' + rowData.id]?.errors?.['required']" class="text-danger">
                     Code system is required.
                   </div>

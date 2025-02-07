@@ -55,7 +55,7 @@
               {{user.lastName}}
             </td>
             <td>
-              <button class="btn btn-success btn-sm" style="margin-right: 5px" type="button">
+              <button class="btn btn-success btn-sm" style="margin-right: 5px" type="button" (click)="editUser(user)">
                 <fa-icon icon="pencil"></fa-icon> Edit
               </button>
               <button class="btn btn-danger btn-sm" style="margin-right: 5px" type="button" (click)="deleteUser(user)">

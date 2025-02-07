@@ -1,12 +1,10 @@
 package gov.nist.hit.hl7.codesetauthoringtool.serviceImpl;
 
 import gov.nist.hit.hl7.codesetauthoringtool.dto.CodesetDTO;
+import gov.nist.hit.hl7.codesetauthoringtool.exception.NotFoundException;
 import gov.nist.hit.hl7.codesetauthoringtool.model.ApiKey;
 import gov.nist.hit.hl7.codesetauthoringtool.model.ApplicationUser;
-import gov.nist.hit.hl7.codesetauthoringtool.model.Codeset;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.CodesetSearchCriteria;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.JwtRequest;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.NewUserRequest;
+import gov.nist.hit.hl7.codesetauthoringtool.model.request.UserRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.repository.UserRepository;
 import gov.nist.hit.hl7.codesetauthoringtool.service.UserService;
 import org.springframework.context.annotation.Lazy;
@@ -53,9 +51,17 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         return users.stream()
                 .collect(Collectors.toList());
     }
+    @Override
+    public ApplicationUser getUser(String id) throws IOException, NotFoundException {
+
+        ApplicationUser user = userRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("User not found")
+        );
+        return user;
+    }
 
     @Override
-    public ApplicationUser createUser(NewUserRequest newUser) throws IOException {
+    public ApplicationUser createUser(UserRequest newUser) throws IOException {
         try {
             if (userRepository.findByUsername(newUser.getUsername()).isPresent()) {
                 throw new IOException("Username " + newUser.getUsername() + " already exists. Please use a different one.");
@@ -69,6 +75,25 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
             userRepository.save(user);
 
             return user;
+        } catch (Exception e) {
+            System.out.println("Error creating user: " + e.getMessage());
+            throw new IOException("Error creating user");
+        }
+
+    }
+    @Override
+    public ApplicationUser editUser(String id, UserRequest userRequest) throws IOException {
+        try {
+            ApplicationUser existingUser = this.userRepository.findById(id).orElseThrow(() -> new IOException("User not found."));
+            if(userRequest.getPassword() != null){
+                String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
+                existingUser.setPassword(hashedPassword);
+            }
+            existingUser.setUsername(userRequest.getUsername());
+            existingUser.setFirstName(userRequest.getFirstName());
+            existingUser.setLastName(userRequest.getLastName());
+            userRepository.save(existingUser);
+            return existingUser;
         } catch (Exception e) {
             System.out.println("Error creating user: " + e.getMessage());
             throw new IOException("Error creating user");

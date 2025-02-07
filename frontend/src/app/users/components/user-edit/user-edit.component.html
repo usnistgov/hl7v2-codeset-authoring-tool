@@ -3,7 +3,7 @@
     <div class="mb-3">
       <dam-alerts-container></dam-alerts-container>
     </div>
+    <app-user-form [form]="form" [action]="'edit'" (submitForm)="submit($event)"></app-user-form>
 
-    <app-user-form [form]="form" [action]="'create'" (submitForm)="submit($event)"></app-user-form>
   </div>
 </div>

@@ -28,14 +28,7 @@ export class CodesetEffects {
             ))
     )
     );
-    // deleteCodesetVersionSuccess$ = createEffect(() => inject(Actions).pipe(
-    //     ofType(deleteCodesetVersionSuccess),
-    //     tap((action) => {
-    //         console.log(action)
-    //         this.store.dispatch(loadCodeset({ codesetId: action.data.data?.id as string, redirect: false }));
-    //     })
-    // ), { dispatch: false }
-    // );
+
     loadCodeset$ = createEffect(() => inject(Actions).pipe(
         ofType(loadCodeset),
         mergeMap((action) => this.codesetService.getCodesetMetadata(action.codesetId)

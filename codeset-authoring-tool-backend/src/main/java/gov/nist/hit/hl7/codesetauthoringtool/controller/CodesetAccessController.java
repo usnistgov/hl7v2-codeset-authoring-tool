@@ -25,7 +25,6 @@ public class CodesetAccessController {
 
     @RequestMapping(value = "/{id}", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("APIAccess('CODESET', #id, READ)")
     public ResponseEntity<CodesetAccessDTO> getCodeset(@RequestHeader(name = "X-API-KEY", required = false) String apiKey, @PathVariable String id,
                                                        @RequestParam(name = "version", required = false) String version,
                                                        @RequestParam(name = "match", required = false) String match) throws IOException {
@@ -36,7 +35,6 @@ public class CodesetAccessController {
 
     @RequestMapping(value = "/{id}/metadata", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("APIAccess('CODESET', #id, READ)")
     public ResponseEntity<CodesetMetadataAccessDTO> getCodesetMetadata(@RequestHeader(name = "X-API-KEY", required = false) String apiKey, @PathVariable String id
     ) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -46,7 +44,6 @@ public class CodesetAccessController {
 
     @RequestMapping(value = "/{id}/versions/{version}/metadata", produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("APIAccess('CODESET', #id, READ)")
     public ResponseEntity<CodesetVersionMetadataAccessDTO> getCodesetVersionMetadata(@RequestHeader(name = "X-API-KEY", required = false) String apiKey,
                                                                               @PathVariable String id, @PathVariable String version
     ) throws IOException {

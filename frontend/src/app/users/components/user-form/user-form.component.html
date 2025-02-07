@@ -1,0 +1,57 @@
+<div style="height: 100%; width: 100%; padding: 3rem; background-color: white; overflow: scroll;">
+  <div style="max-width: 800px; margin: auto;">
+
+    <h2 style="text-align: center;">
+      @if (action === 'edit') {
+      Edit User
+      } @else {
+      Create User
+      }
+    </h2>
+    @if(form){
+    <form [formGroup]="form">
+      <div class="mb-3">
+        <label class="form-label" for="name">Username<span class="text-danger">*</span></label>
+        <input type="text" class="form-control" name="username" id="username" formControlName="username">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">First name</label>
+        <input type="text" class="form-control" name="description" id="description" formControlName="firstName">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Last name</label>
+        <input type="text" class="form-control" name="lastName" id="lastName" formControlName="lastName">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Password
+          @if (form.controls['password'].hasValidator(Validators.required)) {
+          <span class="text-danger">*</span>
+          }
+
+        </label>
+        <input type="password" class="form-control" name="password" id="password" formControlName="password">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Confirm Password
+          @if (form.controls['confirm'].hasValidator(Validators.required)) {
+          <span class="text-danger">*</span>
+          }
+        </label>
+        <input type="password" class="form-control" name="description" id="description" formControlName="confirm">
+      </div>
+    </form>
+    <div class="mb-3" style="display: flex; justify-content: flex-end; width: 100%;">
+      <button (click)="submit()" class="btn btn-primary" [disabled]="form.invalid">
+
+        @if (action === 'edit') {
+        Edit
+        } @else {
+        Create
+        }
+      </button>
+    </div>
+    }
+
+
+  </div>
+</div>

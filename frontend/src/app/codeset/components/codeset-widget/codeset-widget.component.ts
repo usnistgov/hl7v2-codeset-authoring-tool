@@ -78,7 +78,7 @@ export class CodesetWidgetComponent extends DamWidgetComponent {
       take(1),
       map((params: Record<string, string>) => {
         const host = window.location.protocol + '//' + window.location.host;
-        this.codeSetURL = host + '/codesets/' + params['codesetId']
+        this.codeSetURL = host + '/api/v1/access/codesets/' + params['codesetId']
       })
     ).subscribe()
   }

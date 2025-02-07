@@ -15,9 +15,15 @@ export class UserService {
   getUsersList(): Observable<IUser[]> {
     return this.http.get<IUser[]>(`${this.USER_END_POINT}`);
   }
+  getUser(id: string): Observable<IUser> {
+    return this.http.get<IUser>(`${this.USER_END_POINT}/${id}`);
+  }
 
   createUser(userDetails: IUserData): Observable<IMessage<IUser>> {
     return this.http.post<IMessage<IUser>>(`${this.USER_END_POINT}`, userDetails);
+  }
+  editUser(userId: string, userDetails: IUserData): Observable<IMessage<IUser>> {
+    return this.http.put<IMessage<IUser>>(`${this.USER_END_POINT}/${userId}`, userDetails);
   }
   deleteUser(id: string): Observable<IMessage<string>> {
     return this.http.delete<IMessage<string>>(`${this.USER_END_POINT}/${id}`);

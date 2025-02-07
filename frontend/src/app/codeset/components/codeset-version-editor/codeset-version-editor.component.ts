@@ -76,8 +76,7 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
       take(1),
       map((params: Record<string, string>) => {
         const host = window.location.protocol + '//' + window.location.host;
-        this.versionURL = host + '/codesets/' + params['codesetId'] + '/versions/' + params['versionId'];
-        this.codeSetURL = host + '/codesets/' + params['codesetId']
+        this.codeSetURL = host + '/api/v1/access/codesets/' + params['codesetId']
       })
     ).subscribe();
     this.codesetVersions$ = CodesetVersionsState.findAll(this.store)
@@ -88,7 +87,9 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
 
   override onEditorDataUpdate(data: IStateCurrent<ICodesetVersion, never>): void {
     this.codesetVersion.set({ ...data.value });
-
+    if (data.source === "INITIAL") {
+      this.versionURL = `${this.codeSetURL}?version=${this.codesetVersion().version}`;
+    }
   }
 
   public update(event: { codes: ICodesetVersionCode[], valid: boolean | null }): void {
@@ -101,15 +102,6 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
       value: {
         ...this.codesetVersion(),
         codes: event.codes
-        // label: formContent['label'],
-        // fields: Object.keys(fieldsMetadata)
-        //   .map((key) => ({
-        //     key,
-        //     value: formContent[key],
-        //     label: fieldsMetadata[key].label,
-        //     disabled: fieldsMetadata[key].disabled,
-        //     required: fieldsMetadata[key].required,
-        //   }))
       },
     });
   }

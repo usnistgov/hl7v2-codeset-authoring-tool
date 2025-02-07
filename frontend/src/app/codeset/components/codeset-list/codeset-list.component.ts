@@ -200,7 +200,6 @@ export class CodesetListComponent {
             }
           ).pipe(
             mergeMap(res => {
-              console.log(res)
               return this.codesetService.getCodesetList().pipe(
                 tap((values) => {
                   CodesetListState.setValue(this.store, values);
@@ -229,7 +228,6 @@ export class CodesetListComponent {
       }
     ).pipe(
       map(res => {
-        console.log(res)
         this.router.navigate(['/', 'codesets', res.resourceId, 'dashboard']);
         // CodesetState.getOneValue(this.store).pipe(
         //   take(1),

@@ -1,11 +1,8 @@
 package gov.nist.hit.hl7.codesetauthoringtool.controller;
 
-import gov.nist.hit.hl7.codesetauthoringtool.dto.CodesetDTO;
+import gov.nist.hit.hl7.codesetauthoringtool.exception.NotFoundException;
 import gov.nist.hit.hl7.codesetauthoringtool.model.ApplicationUser;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.AuthUser;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.CodesetSearchCriteria;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.JwtRequest;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.NewUserRequest;
+import gov.nist.hit.hl7.codesetauthoringtool.model.request.UserRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.model.response.ResponseMessage;
 import gov.nist.hit.hl7.codesetauthoringtool.security.JwtTokenUtil;
 import gov.nist.hit.hl7.codesetauthoringtool.service.AuthService;
@@ -50,11 +47,24 @@ public class UserController {
         List<ApplicationUser> users = userDetailsService.getUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+    @RequestMapping(value = "/{id}", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<ApplicationUser> getUser(@PathVariable String id) throws IOException, NotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ApplicationUser user = userDetailsService.getUser(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "", produces = "application/json",
             method = RequestMethod.POST)
-    public ResponseMessage<?> createNewUser(@RequestBody NewUserRequest newUserRequest) throws Exception {
+    public ResponseMessage<?> createNewUser(@RequestBody UserRequest newUserRequest) throws Exception {
         ApplicationUser newUser = userDetailsService.createUser(newUserRequest);
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "User created Successfully", newUser.getId().toString(), null, newUser);
+
+    }
+    @RequestMapping(value = "/{id}", produces = "application/json",
+            method = RequestMethod.PUT)
+    public ResponseMessage<?> editUser(@PathVariable String id,@RequestBody UserRequest userRequest) throws Exception {
+        ApplicationUser newUser = userDetailsService.editUser(id,userRequest);
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "User created Successfully", newUser.getId().toString(), null, newUser);
 
     }

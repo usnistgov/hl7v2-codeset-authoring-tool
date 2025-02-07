@@ -2,7 +2,6 @@ package gov.nist.hit.hl7.codesetauthoringtool.controller;
 
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.AuthUser;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.JwtRequest;
-import gov.nist.hit.hl7.codesetauthoringtool.model.request.NewUserRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.service.AuthService;
 import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.AuthServiceImpl;
 import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.UserDetailsServiceImpl;

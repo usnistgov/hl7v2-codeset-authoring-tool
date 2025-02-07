@@ -115,7 +115,7 @@ export class CodesetTableComponent {
   }
 
   getCodeSystemOptions() {
-    return this.codeSystems.map((codeSystem: string) => {
+    return this.codeSystems.filter(c => c).map((codeSystem: string) => {
       return { label: codeSystem, value: codeSystem };
     });
   }
@@ -220,7 +220,6 @@ export class CodesetTableComponent {
   }
   exportCSV() {
     this.exportCSVEvent.emit(this.codeSetVersion);
-
   }
   getUniqueCodeSystems(codes: ICodesetVersionCode[]): string[] {
     const codeSystems = codes.map((code) => code.system);

@@ -35,6 +35,7 @@ import { UsersListComponent, UsersListState } from './users/components/users-lis
 import { UserCreateComponent } from './users/components/user-create/user-create.component';
 import { ApiKeyListComponent, ApiKeyListState } from './api-key/components/api-key-list/api-key-list.component';
 import { ApiKeyCreateComponent } from './api-key/components/api-key-create/api-key-create.component';
+import { UserEditComponent } from './users/components/user-edit/user-edit.component';
 
 const DEFAULT_ERROR_URL = () => ({ command: ['/', 'error'] });
 
@@ -72,71 +73,7 @@ export const routes: Routes = [
       .build(),
     component: ForgotPasswordComponent,
   },
-  {
-    path: 'entity',
-    children: [
-      {
-        path: 'list',
-        ...damfRouteConfig()
-          .useAuthenticated()
-          .useLoadData(EntityListState)
-          .useErrorURL(DEFAULT_ERROR_URL)
-          .useMessaging({})
-          .build(),
-        component: EntityListComponent,
-      },
-      {
-        path: 'create',
-        ...damfRouteConfig()
-          .useAuthenticated()
-          .useMessaging({
-            tags: ['CREATE_ENTITY_ISSUES'],
-          })
-          .build(),
-        component: EntityCreateComponent,
-      },
-      {
-        path: ':entityId',
-        ...damfRouteConfig()
-          .useWidget({
-            widgetId: ENTITY_WIDGET_ID,
-            component: EntityWidgetComponent,
-          })
-          .useAuthenticated()
-          .useLoadManyData([EntityState, SectionLinkDisplayState])
-          .useErrorURL(DEFAULT_ERROR_URL)
-          .useMessaging({})
-          .withChildren([
-            {
-              path: 'text/:textSectionId',
-              ...damfRouteConfig()
-                .useAuthenticated()
-                .useEditor({
-                  component: EntityTextEditorComponent,
-                  initializer: SECTION_TEXT_EDITOR_INITIALIZER,
-                  saveOnRouteExit: true,
-                })
-                .useErrorURL(DEFAULT_ERROR_URL)
-                .useMessaging({})
-                .build(),
-            },
-            {
-              path: 'form/:formSectionId',
-              ...damfRouteConfig()
-                .useAuthenticated()
-                .useEditor({
-                  component: EntityFormEditorComponent,
-                  initializer: SECTION_FORM_EDITOR_INITIALIZER,
-                  saveOnRouteExit: true,
-                })
-                .useErrorURL(DEFAULT_ERROR_URL)
-                .useMessaging({})
-                .build(),
-            },
-          ]),
-      },
-    ],
-  },
+
   {
     path: 'codesets',
     children: [
@@ -250,6 +187,16 @@ export const routes: Routes = [
           })
           .build(),
         component: UserCreateComponent,
+      },
+      {
+        path: 'edit/:id',
+        ...damfRouteConfig()
+          .useAuthenticated()
+          .useMessaging({
+            tags: ['CREATE_ENTITY_ISSUES'],
+          })
+          .build(),
+        component: UserEditComponent,
       },
 
     ],

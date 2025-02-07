@@ -80,6 +80,9 @@ export class UsersListComponent {
   createUser() {
     this.router.navigate(['/users/create'])
   }
+  editUser(key: IUser) {
+    this.router.navigate(['/users/edit/' + key.id])
+  }
   deleteUser(key: IUser) {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete User "' + key.username + '"?',
