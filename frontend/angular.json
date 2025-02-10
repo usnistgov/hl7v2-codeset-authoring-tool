@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "damt-template": {
+    "frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -72,10 +72,10 @@
           },
           "configurations": {
             "production": {
-              "buildTarget": "damt-template:build:production"
+              "buildTarget": "frontend:build:production"
             },
             "development": {
-              "buildTarget": "damt-template:build:development"
+              "buildTarget": "frontend:build:development"
             }
           },
           "defaultConfiguration": "development"

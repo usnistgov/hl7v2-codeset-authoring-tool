@@ -1,0 +1,22 @@
+stages:
+  - triggers
+
+variables:
+  DOCKER_IMAGE_PROD: "nist775hit/hl7-codeset-adapter-prod"
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://docker:2375  # Ensure Docker commands connect to the DinD service
+  DOCKER_TLS_CERTDIR: ""          # Disable TLS for Docker-in-Docker
+  
+build_trigger:
+  stage: triggers
+  trigger:
+    include: pipelines/build/.gitlab-ci.yml
+  when: "manual"
+  allow_failure: false 
+
+deploy_trigger:
+  stage: triggers
+  trigger:
+    include: pipelines/deploy/.gitlab-ci.yml
+  when: "manual"
+  allow_failure: false 

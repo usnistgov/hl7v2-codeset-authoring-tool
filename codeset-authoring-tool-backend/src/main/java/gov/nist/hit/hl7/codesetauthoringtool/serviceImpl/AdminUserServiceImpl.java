@@ -17,7 +17,6 @@ import javax.annotation.PostConstruct;
 public class AdminUserServiceImpl implements AdminUserService {
     @Value("${adminDefaultUsername}")
     private String adminDefaultUsername;
-
     @Value("${adminDefaultPassowrd}")
     private String adminDefaultPassword;
     private final JdbcTemplate jdbcTemplate;
