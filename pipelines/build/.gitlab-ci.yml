@@ -31,7 +31,6 @@ build_and_push_docker_image_prod:
     - name: docker:24.0.2-dind
   script:
     - cp codeset-authoring-tool-backend/target/codeset-authoring-tool.jar .
-    - cp Dockerfile .
     - docker build -t "$DOCKER_IMAGE_PROD:latest" -t "$DOCKER_IMAGE_PROD:$CI_COMMIT_BRANCH" .
     - docker push $DOCKER_IMAGE_PROD:latest
     - docker push $DOCKER_IMAGE_PROD:$CI_COMMIT_BRANCH
