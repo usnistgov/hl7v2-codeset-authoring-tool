@@ -29,6 +29,8 @@ build_and_push_docker_image_prod:
   image: docker:24.0.2
   services:
     - name: docker:24.0.2-dind
+  before_script:
+    - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
   script:
     - cp codeset-authoring-tool-backend/target/codeset-authoring-tool.jar .
     - docker build -t "$DOCKER_IMAGE_PROD:latest" -t "$DOCKER_IMAGE_PROD:$CI_COMMIT_BRANCH" .
