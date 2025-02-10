@@ -120,6 +120,7 @@
     </dependencies>
 
     <build>
+        <finalName>codeset-authoring-tool</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
