@@ -18,7 +18,7 @@ generate_jar:
 
   artifacts:
     paths:
-      - codeset-authoring-tool/target/codeset-authoring-tool.jar 
+      - codeset-authoring-tool-backend/target/codeset-authoring-tool.jar 
     expire_in: 1 hour
   when: "manual"
   allow_failure: false 
