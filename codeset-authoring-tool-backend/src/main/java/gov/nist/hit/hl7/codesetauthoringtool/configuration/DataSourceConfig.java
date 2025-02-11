@@ -16,15 +16,15 @@ public class DataSourceConfig {
         this.env = env;
     }
 
-    @Bean
-    public DataSource dataSource() {
-        HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl(env.getProperty("url", "jdbc:postgresql://localhost:5432/postgres"));
-        dataSource.setUsername(env.getProperty("username", ""));
-        dataSource.setPassword(env.getProperty("password", ""));
-
-        return dataSource;
-    }
+//    @Bean
+//    public DataSource dataSource() {
+//        HikariDataSource dataSource = new HikariDataSource();
+//        dataSource.setJdbcUrl(env.getProperty("spring.datasource.url", ""));
+//        dataSource.setUsername(env.getProperty("db-username", ""));
+//        dataSource.setPassword(env.getProperty("db-password", ""));
+//
+//        return dataSource;
+//    }
 
 
 }
