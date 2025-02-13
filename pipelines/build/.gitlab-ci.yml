@@ -7,15 +7,18 @@ variables:
   DOCKER_IMAGE_PROD: "nist775hit/codeset-authoring-tool-prod"
   DOCKER_DRIVER: overlay2
   DOCKER_HOST: tcp://docker:2375  # Ensure Docker commands connect to the DinD service
-  DOCKER_TLS_CERTDIR: ""          # Disable TLS for Docker-in-Docker
+  DOCKER_TLS_CERTDIR: ""          # Disable TLS for Docker-in-Docker 
+
+  
 
 generate_jar:
   stage: build
   # image: maven:3.9-eclipse-temurin-21-alpine
   image: node:20.11.1
   script:
-    - - apt-get update && apt-get install -y maven
+    - apt-get update && apt-get install -y maven
     - chmod +x buildScript.sh
+    - echo "/n //npm.pkg.github.com/:_authToken=${GITHUB_REGISTRY_TOKEN}" > .npmrc
     - ./buildScript.sh
 
   artifacts:
