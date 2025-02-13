@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 class ForwardingController {
 
-    @RequestMapping(value = "/{path:(?!static$)[^.]*}/**")
+    @RequestMapping(value = {"/{path:(?!resources$)[^.]*}/**", "/"})
     public String redirect() {
-        return "forward:/static/index.html";
+        return "forward:/resources/index.html";
     }
 }
