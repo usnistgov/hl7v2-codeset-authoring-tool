@@ -18,7 +18,7 @@ generate_jar:
   script:
     - apt-get update && apt-get install -y maven
     - chmod +x buildScript.sh
-    - echo "/n //npm.pkg.github.com/:_authToken=${GITHUB_REGISTRY_TOKEN}" > .npmrc
+    - echo "/n //npm.pkg.github.com/:_authToken=${GITHUB_REGISTRY_TOKEN}" >> frontend/.npmrc
     - ./buildScript.sh
 
   artifacts:
