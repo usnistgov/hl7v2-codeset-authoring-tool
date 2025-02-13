@@ -23,6 +23,11 @@ const DEFAULT_ERROR_URL = () => ({ command: ['/', 'error'] });
 
 export const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full',
+  },
+  {
     path: 'home',
     component: HomeComponent,
   },
