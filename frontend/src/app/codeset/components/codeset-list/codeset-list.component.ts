@@ -5,6 +5,7 @@ import {
   DamAlertsContainerComponent,
   DataStateRepository,
   IListItemControl,
+  IMessage,
   ListWidgetComponent,
   MessageHandlerMode,
   MessageType,
@@ -13,7 +14,7 @@ import {
 } from '@usnistgov/ngx-dam-framework';
 import { Store } from '@ngrx/store';
 import { map, mergeMap, of, skip, switchMap, take, tap, throwError } from 'rxjs';
-import { ICodesetDescriptor } from '../../models/codeset';
+import { ICodeset, ICodesetDescriptor } from '../../models/codeset';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -221,15 +222,8 @@ export class CodesetListComponent {
 
       }
     ).pipe(
-      map(res => {
-        this.router.navigate(['/', 'codesets', res.resourceId, 'dashboard']);
-        // CodesetState.getOneValue(this.store).pipe(
-        //   take(1),
-        //   map((codeset) => {
-        //     this.store.dispatch(loadCodeset({ codesetId: codeset.id, redirect: true }));
-
-        //   })
-        // ).subscribe()
+      map((res: IMessage<string>) => {
+        this.router.navigate(['/', 'codesets', res.data, 'dashboard']);
       })
     ).subscribe()
   }

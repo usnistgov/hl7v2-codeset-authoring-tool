@@ -86,7 +86,7 @@ public class CodesetController {
     public ResponseMessage<?> cloneCodeset(@PathVariable String id) throws IOException, NotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Codeset cloned = codesetService.cloneCodeset(id, authentication.getName());
-        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Cloned Successfully", cloned.getId(), null, null);
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Code Set Cloned Successfully", cloned.getId(), null, cloned.getId());
     }
 
 
