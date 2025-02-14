@@ -14,7 +14,7 @@ variables:
 generate_jar:
   stage: build
   # image: maven:3.9-eclipse-temurin-21-alpine
-  image: node:20.11.1
+  image: nist775hit/java-21-node-20:1.0
   script:
     - apt-get update && apt-get install -y maven
     - chmod +x buildScript.sh
