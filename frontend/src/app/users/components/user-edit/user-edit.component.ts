@@ -42,6 +42,7 @@ export class UserEditComponent {
       tap((user) => {
         this.form = this._formBuilder.group({
           username: [user.username, Validators.required],
+          email: [user.email, Validators.required],
           firstName: [user.firstName],
           lastName: [user.lastName],
           password: [''],

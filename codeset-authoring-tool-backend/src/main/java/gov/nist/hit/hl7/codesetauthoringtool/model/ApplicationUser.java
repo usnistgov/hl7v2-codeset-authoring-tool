@@ -20,6 +20,8 @@ public class ApplicationUser {
     private String password; // Store securely (e.g., hashed with bcrypt)
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String email;
 
     @PrePersist

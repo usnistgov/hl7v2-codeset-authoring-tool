@@ -19,6 +19,8 @@ public class AdminUserServiceImpl implements AdminUserService {
     private String adminDefaultUsername;
     @Value("${adminDefaultPassowrd}")
     private String adminDefaultPassword;
+    @Value("${adminDefaultEmail}")
+    private String adminDefaultEmail;
     private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder passwordEncoder;
 
@@ -32,7 +34,7 @@ public class AdminUserServiceImpl implements AdminUserService {
         if (existingUsers == 0) {
             String hashedPassword = passwordEncoder.encode(adminDefaultPassword);
             String id = UUID.randomUUID().toString().replace("-", "");
-            jdbcTemplate.update("INSERT INTO users (id, username, password) VALUES (?,?, ?)",id, adminDefaultUsername, hashedPassword);
+            jdbcTemplate.update("INSERT INTO users (id, username, email, password) VALUES (?,?, ?)",id, adminDefaultUsername, adminDefaultEmail, hashedPassword);
             System.out.println("Admin user created successfully.");
         } else {
             System.out.println("Admin user already exists.");

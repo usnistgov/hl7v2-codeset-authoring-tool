@@ -36,11 +36,7 @@ export const HEADERS: IHeaderMenuOptions = Object.freeze({
       {
         label: 'Login',
         routerLink: '/login',
-      },
-      {
-        label: 'Register',
-        routerLink: '/register',
-      },
+      }
     ],
     loggedIn: [
       {
@@ -54,7 +50,7 @@ export const HEADERS: IHeaderMenuOptions = Object.freeze({
         label: 'User management',
         handler: (injector: Injector) => {
           const router = injector.get(Router);
-          router.navigate(['/users/list'])
+          router.navigate(['/users/list']);
         },
       },
       {

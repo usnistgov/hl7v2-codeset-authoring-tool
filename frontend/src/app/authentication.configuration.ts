@@ -14,7 +14,7 @@ export const AUTHENTICATION_CONFIGURATION: IAuthenticationConfig =
     },
     forgotPasswordUrl: '/forgot-password',
     loginPageRedirectUrl: '/login',
-    unprotectedRedirectUrl: '',
+    unprotectedRedirectUrl: '/home',
     loginSuccessRedirectUrl: '/home',
     sessionTimeoutStatusCodes: [403],
     unauthorized: {

@@ -66,12 +66,16 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
             if (userRepository.findByUsername(newUser.getUsername()).isPresent()) {
                 throw new IOException("Username " + newUser.getUsername() + " already exists. Please use a different one.");
             }
+            if (userRepository.findByEmail(newUser.getEmail()).isPresent()) {
+                throw new IOException("Email " + newUser.getEmail() + " already exists. Please use a different one.");
+            }
             String hashedPassword = passwordEncoder.encode(newUser.getPassword());
             ApplicationUser user = new ApplicationUser();
             user.setUsername(newUser.getUsername());
             user.setPassword(hashedPassword);
             user.setFirstName(newUser.getFirstName());
             user.setLastName(newUser.getLastName());
+            user.setEmail(newUser.getEmail());
             userRepository.save(user);
 
             return user;
@@ -85,6 +89,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public ApplicationUser editUser(String id, UserRequest userRequest) throws IOException {
         try {
             ApplicationUser existingUser = this.userRepository.findById(id).orElseThrow(() -> new IOException("User not found."));
+            if(!existingUser.getUsername().equals(userRequest.getUsername()) && userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
+                throw new IOException("Username " + userRequest.getUsername() + " already exists. Please use a different one.");
+            }
+            if(!existingUser.getEmail().equals(userRequest.getEmail()) && userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
+                throw new IOException("Email " + userRequest.getEmail() + " already exists. Please use a different one.");
+            }
             if(userRequest.getPassword() != null){
                 String hashedPassword = passwordEncoder.encode(userRequest.getPassword());
                 existingUser.setPassword(hashedPassword);
@@ -92,11 +102,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
             existingUser.setUsername(userRequest.getUsername());
             existingUser.setFirstName(userRequest.getFirstName());
             existingUser.setLastName(userRequest.getLastName());
+            existingUser.setEmail(userRequest.getEmail());
             userRepository.save(existingUser);
             return existingUser;
         } catch (Exception e) {
             System.out.println("Error creating user: " + e.getMessage());
-            throw new IOException("Error creating user");
+            throw new IOException(e.getMessage());
         }
 
     }

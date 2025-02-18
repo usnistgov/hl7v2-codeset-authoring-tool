@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './core/components/home/home.component';
 import { damfRouteConfig, LoginComponent } from '@usnistgov/ngx-dam-framework';
-import { RegisterComponent } from './core/components/register/register.component';
 import { ForgotPasswordComponent } from './core/components/forgot-password/forgot-password.component';
 import { ErrorPageComponent } from './core/components/error-page/error-page.component';
 
@@ -39,16 +38,6 @@ export const routes: Routes = [
         tags: ['LOGIN_ISSUES'],
       }),
     component: LoginComponent,
-  },
-  {
-    path: 'register',
-    ...damfRouteConfig()
-      .useNotAuthenticated()
-      .useMessaging({
-        tags: ['REGISTER_ISSUES'],
-      })
-      .build(),
-    component: RegisterComponent,
   },
   {
     path: 'forgot-password',

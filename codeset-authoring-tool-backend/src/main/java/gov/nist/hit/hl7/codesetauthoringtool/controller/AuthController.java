@@ -2,6 +2,7 @@ package gov.nist.hit.hl7.codesetauthoringtool.controller;
 
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.AuthUser;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.JwtRequest;
+import gov.nist.hit.hl7.codesetauthoringtool.model.response.ResponseMessage;
 import gov.nist.hit.hl7.codesetauthoringtool.service.AuthService;
 import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.AuthServiceImpl;
 import gov.nist.hit.hl7.codesetauthoringtool.serviceImpl.UserDetailsServiceImpl;
@@ -35,8 +36,10 @@ public class AuthController {
 
     @RequestMapping(value = "/login", produces = "application/json",
             method = RequestMethod.POST)
-    public AuthUser login(@RequestBody JwtRequest authenticationRequest, HttpServletResponse response) throws Exception {
-        return authService.login(authenticationRequest, response);
+    public ResponseMessage<?> login(@RequestBody JwtRequest authenticationRequest, HttpServletResponse response) throws Exception {
+        AuthUser user = authService.login(authenticationRequest, response);
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Logged in Successfully", null, null, user);
+
     }
 
 
@@ -63,8 +66,14 @@ public class AuthController {
             response.sendError(403);
             throw e;
         }
-
     }
 
+//    @RequestMapping(value = "/reset-password", produces = "application/json",
+//            method = RequestMethod.POST)
+//    public ResponseMessage<?> resetPassword(@RequestBody String email, HttpServletResponse response) throws Exception {
+//        AuthUser user = authService.resetPassword(authenticationRequest, response);
+//        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Logged in Successfully", null, null, user);
+//
+//    }
 
-}
+    }

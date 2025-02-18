@@ -12,9 +12,9 @@ deploy_prod:
   stage: deploy-prod
   script:
     - echo "Deploying codeset authoring tool in hit dev"
-    - cd /sites/apps/codeset-authoring-tool-deployment
+    - cd /sites/apps/hl7v2-codeset-authoring-tool-deployment
     # - git pull 
-    - cd containers/apps
+    - cd containers/apps/prod/scripts
     - bash start.sh
   tags:
     - hitdev

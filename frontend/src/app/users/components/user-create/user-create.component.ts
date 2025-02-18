@@ -32,6 +32,7 @@ export class UserCreateComponent {
   ) {
     this.form = this._formBuilder.group({
       username: ['', Validators.required],
+      email: ['', Validators.required],
       firstName: [''],
       lastName: [''],
       password: ['', Validators.required],
