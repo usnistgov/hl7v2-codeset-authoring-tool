@@ -92,7 +92,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
             if(!existingUser.getUsername().equals(userRequest.getUsername()) && userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
                 throw new IOException("Username " + userRequest.getUsername() + " already exists. Please use a different one.");
             }
-            boolean isEmailNull = userRequest.getEmail() == null;
+            boolean isEmailNull = existingUser.getEmail() == null;
             if( (isEmailNull || !existingUser.getEmail().equals(userRequest.getEmail())) && userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
                 throw new IOException("Email " + userRequest.getEmail() + " already exists. Please use a different one.");
             }
