@@ -37,7 +37,7 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/v1/login","/api/auth/v1/logout","/api/auth/v1/status").permitAll() // Permit all requests to login endpoint
+                        .requestMatchers("/api/auth/v1/*","/api/auth/v1/logout","/api/auth/v1/status", "/api/auth/v1/reset-password").permitAll() // Permit all requests to login endpoint
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/codesets").authenticated() // Require authentication for all other /api/v1/** endpoints

@@ -17,6 +17,7 @@ import { UserCreateComponent } from './users/components/user-create/user-create.
 import { ApiKeyListComponent, ApiKeyListState } from './api-key/components/api-key-list/api-key-list.component';
 import { ApiKeyCreateComponent } from './api-key/components/api-key-create/api-key-create.component';
 import { UserEditComponent } from './users/components/user-edit/user-edit.component';
+import { ResetPasswordComponent } from './core/components/reset-password/reset-password.component';
 
 const DEFAULT_ERROR_URL = () => ({ command: ['/', 'error'] });
 
@@ -44,10 +45,18 @@ export const routes: Routes = [
     ...damfRouteConfig()
       .useNotAuthenticated()
       .useMessaging({
-        tags: ['FP_ISSUES'],
       })
       .build(),
     component: ForgotPasswordComponent,
+  },
+  {
+    path: 'reset-password',
+    ...damfRouteConfig()
+      .useNotAuthenticated()
+      .useMessaging({
+      })
+      .build(),
+    component: ResetPasswordComponent,
   },
 
   {

@@ -5,32 +5,33 @@ import { ApiKeyService } from '../../../api-key/services/api-key.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../api-key/services/auth.service';
 import { tap } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-forgot-password',
+  selector: 'app-reset-password',
   standalone: true,
   imports: [
     DamAlertsContainerComponent,
     ReactiveFormsModule,
   ],
-  templateUrl: './forgot-password.component.html',
-  styleUrl: './forgot-password.component.scss'
+  templateUrl: './reset-password.component.html',
+  styleUrl: './reset-password.component.scss'
 })
-export class ForgotPasswordComponent {
+export class ResetPasswordComponent {
   form: FormGroup;
+  token!: string;
   constructor(
     private utilityService: UtilityService,
-    private dialog: MatDialog,
     private _formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
+    this.token = this.route.snapshot.params['token'];
     this.form = this._formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]]
     });
-
-
   }
 
   sendResetLink() {
