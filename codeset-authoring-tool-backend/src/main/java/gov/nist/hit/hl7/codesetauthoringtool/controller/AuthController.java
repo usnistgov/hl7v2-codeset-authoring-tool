@@ -1,6 +1,7 @@
 package gov.nist.hit.hl7.codesetauthoringtool.controller;
 
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.AuthUser;
+import gov.nist.hit.hl7.codesetauthoringtool.model.request.ForgotPasswordRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.JwtRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.model.request.ResetPasswordRequest;
 import gov.nist.hit.hl7.codesetauthoringtool.model.response.ResponseMessage;
@@ -69,10 +70,17 @@ public class AuthController {
         }
     }
 
+    @RequestMapping(value = "/forgot-password", produces = "application/json",
+            method = RequestMethod.POST)
+    public ResponseMessage<?> forgotPassword(@RequestBody ForgotPasswordRequest request, HttpServletResponse response) throws Exception {
+        authService.forgotPassword(request.getEmail(), response);
+        return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Password reset link sent to email", null, null, null);
+    }
+
     @RequestMapping(value = "/reset-password", produces = "application/json",
             method = RequestMethod.POST)
     public ResponseMessage<?> resetPassword(@RequestBody ResetPasswordRequest request, HttpServletResponse response) throws Exception {
-        authService.resetPassword(request.getEmail(), response);
+        authService.resetPassword(request.getToken(),request.getPassword());
         return new ResponseMessage<>(ResponseMessage.Status.SUCCESS, "Password reset link sent to email", null, null, null);
     }
 

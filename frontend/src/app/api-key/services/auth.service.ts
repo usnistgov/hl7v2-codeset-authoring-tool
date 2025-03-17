@@ -13,7 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   sendResetLink(email: string): Observable<IMessage<string>> {
-    return this.http.post<IMessage<string>>(`${this.AUTH_END_POINT}/reset-password`, { email });
+    return this.http.post<IMessage<string>>(`${this.AUTH_END_POINT}/forgot-password`, { email });
   }
   resetPassword(token: string, password: string): Observable<IMessage<string>> {
     return this.http.post<IMessage<string>>(`${this.AUTH_END_POINT}/reset-password`, { token, password });

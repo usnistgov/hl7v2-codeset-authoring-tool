@@ -27,7 +27,7 @@ export class ResetPasswordComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.token = this.route.snapshot.params['token'];
+    this.token = this.route.snapshot.queryParams['token'];
     this.form = this._formBuilder.group({
       password: ['', [Validators.required]],
       confirmPassword: ['', [Validators.required]]
@@ -36,7 +36,7 @@ export class ResetPasswordComponent {
 
   sendResetLink() {
     this.utilityService.useLoaderWithErrorAlert(
-      this.authService.sendResetLink(this.form.value.email),
+      this.authService.resetPassword(this.token, this.form.value.password),
       {
         message: {
           fromHttpResponse: true,

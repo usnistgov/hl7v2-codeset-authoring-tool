@@ -47,24 +47,18 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @Override
     public ApplicationUser getUserByEmail(String email) throws NotFoundException {
         Optional<ApplicationUser> userOptional = userRepository.findByEmail(email);
-
-        // Use orElseThrow to handle the case where the user is not found
-        ApplicationUser user = userOptional.orElseThrow(() -> new NotFoundException("Email not found"));
-
-        // Return a UserDetails object
+        ApplicationUser user = userOptional.orElse(null);
         return user;
     }
 
     @Override
     public List<ApplicationUser> getUsers() throws IOException {
-
         List<ApplicationUser> users = userRepository.findAll();
         return users.stream()
                 .collect(Collectors.toList());
     }
     @Override
     public ApplicationUser getUser(String id) throws IOException, NotFoundException {
-
         ApplicationUser user = userRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("User not found")
         );

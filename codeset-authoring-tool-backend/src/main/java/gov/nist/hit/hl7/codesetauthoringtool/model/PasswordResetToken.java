@@ -11,7 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "password_reset_token")
 public class PasswordResetToken {
-    private static final int EXPIRATION = 60 * 24;
+    private static final int EXPIRATION = 60 * 24 * 60 * 1000;
     @Id
     private String id;
     private String token;
@@ -74,5 +74,10 @@ public class PasswordResetToken {
     public static int getExpiration() {
         return EXPIRATION;
     }
+    public boolean isExpired() {
+        Date now = new Date();
+        return this.expiryDate.before(now);
+    }
+
 
 }

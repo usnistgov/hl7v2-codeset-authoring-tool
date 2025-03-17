@@ -1,21 +1,25 @@
 package gov.nist.hit.hl7.codesetauthoringtool.model.request;
 
 public class ResetPasswordRequest {
-    private String email;
+    private String token;
+    private String password;
 
     public ResetPasswordRequest() {
     }
 
-    public ResetPasswordRequest(String email) {
-        this.email = email;
+    public String getToken() {
+        return token;
     }
 
-    public String getEmail() {
-        return email;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getPassword() {
+        return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

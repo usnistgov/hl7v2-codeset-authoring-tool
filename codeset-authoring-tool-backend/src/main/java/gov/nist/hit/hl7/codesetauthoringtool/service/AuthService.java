@@ -13,5 +13,8 @@ import java.util.List;
 public interface AuthService {
 
     public AuthUser login(JwtRequest authenticationRequest, HttpServletResponse response) throws AuthenticationException, IOException;
-    public boolean resetPassword(String email, HttpServletResponse response) throws Exception;
+
+    public boolean forgotPassword(String email, HttpServletResponse response) throws Exception;
+    public boolean resetPassword(String token, String password) throws Exception;
+
 }
