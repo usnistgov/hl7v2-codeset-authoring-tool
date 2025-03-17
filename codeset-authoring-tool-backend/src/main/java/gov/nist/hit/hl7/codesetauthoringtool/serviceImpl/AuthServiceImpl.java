@@ -88,13 +88,24 @@ public class AuthServiceImpl implements AuthService {
         passwordResetToken.setExpiryDate(date);
         String url = frontendUrl + "/reset-password?token=" + hashedToken;
 //        sendResetTokenUrl(user.getFirstName(), user.getUsername(), user.getEmail(), resetToken);
-        String text = "Dear " + user.getFirstName() + " \n\n"
-                + "**** If you have not requested a password reset, please disregard this email **** \n\n\n"
-                + "You password reset request has been processed.\n"
-                + "Copy and paste the following url to your browser to initiate the password change:\n"
-                + url + " \n\n" + "Sincerely, " + "\n\n" + "The IGAMT Team" + "\n\n"
-                + "P.S: If you need help, contact us at '" + "'";
-        emailService.sendEmail(user.getEmail(), "Password Reset Request", text);
+//        String text = "Dear " + user.getFirstName() + " \n\n"
+//                + "**** If you have not requested a password reset, please disregard this email **** \n\n\n"
+//                + "You password reset request has been processed.\n"
+//                + "Copy and paste the following url to your browser to initiate the password change:\n"
+//                + url + " \n\n" + "Sincerely, " + "\n\n"
+//                + "P.S: If you need help, contact us at '" + "'";
+        StringBuilder emailContent = new StringBuilder();
+        emailContent.append("Dear ").append(user.getFirstName()).append(",\n\n")
+                .append("**** If you have not requested a password reset, please disregard this email ****\n\n")
+                .append("Your password reset request has been processed.\n")
+                .append("Click the button below to initiate the password change:\n\n")
+                .append("<a href='").append(url).append("' style='display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;'>Reset Password</a>\n\n")
+                .append("Sincerely,\n\n")
+                .append("P.S: If you need help, contact us at");
+
+        String emailMessage = emailContent.toString();
+
+        emailService.sendEmail(user.getEmail(), "Password Reset Request", emailMessage);
         System.out.println(hashedToken);
         passwordResetTokenRepository.save(passwordResetToken);
         return true;

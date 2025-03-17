@@ -1,6 +1,7 @@
 package gov.nist.hit.hl7.codesetauthoringtool.advice;
 
 import gov.nist.hit.hl7.codesetauthoringtool.exception.NotFoundException;
+import gov.nist.hit.hl7.codesetauthoringtool.exception.ResourceAPIAccessDeniedException;
 import gov.nist.hit.hl7.codesetauthoringtool.model.response.ResponseMessage;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
@@ -35,5 +36,11 @@ public class GlobalExceptionHandler {
         return  new ResponseMessage<>(ResponseMessage.Status.FAILED, ex.getMessage());
 
     }
+    @ResponseBody
+    @ExceptionHandler(ResourceAPIAccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseMessage notFoundException(ResourceAPIAccessDeniedException ex) {
+        return  new ResponseMessage<>(ResponseMessage.Status.FAILED, ex.getMessage());
 
+    }
 }
