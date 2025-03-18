@@ -94,18 +94,25 @@ public class AuthServiceImpl implements AuthService {
 //                + "Copy and paste the following url to your browser to initiate the password change:\n"
 //                + url + " \n\n" + "Sincerely, " + "\n\n"
 //                + "P.S: If you need help, contact us at '" + "'";
-        StringBuilder emailContent = new StringBuilder();
-        emailContent.append("Dear ").append(user.getFirstName()).append(",\n\n")
-                .append("**** If you have not requested a password reset, please disregard this email ****\n\n")
-                .append("Your password reset request has been processed.\n")
-                .append("Click the button below to initiate the password change:\n\n")
-                .append("<a href='").append(url).append("' style='display:inline-block; padding:10px 20px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;'>Reset Password</a>\n\n")
-                .append("Sincerely,\n\n")
-                .append("P.S: If you need help, contact us at");
+        String firstName = (user.getFirstName() != null) ? user.getFirstName() : "";
+        String htmlContent = "<html><body style='font-family: Arial, sans-serif; color: #333;'>"
+                + "<div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; background-color: #f9f9f9;'>"
+                + "<h2 style='color: #007BFF; text-align: center;'>Password Reset Request</h2>"
+                + "<p style='font-size: 16px;'>Dear <strong>" + firstName + "</strong>,</p>"
+                + "<p style='font-size: 16px;'>We received a request to reset your password. If you did not request this change, please disregard this email.</p>"
+                + "<p style='font-size: 16px;'>To reset your password, simply click the button below:</p>"
+                + "<table role='presentation' cellspacing='0' cellpadding='0' border='0' style='width: 100%; margin-top: 20px;'>"
+                + "<tr><td style='border-radius: 5px;' bgcolor='#007BFF' align='center'>"
+                + "<a href='" + url + "' style='display: inline-block; padding: 12px 25px; background-color: #007BFF; color: white; font-size: 16px; text-decoration: none; border-radius: 5px; font-weight: bold;'>Reset Password</a>"
+                + "</td></tr></table>"
+                + "<p style='font-size: 14px; color: #888; text-align: center; margin-top: 30px;'>If you have any issues, feel free to <a href='mailto:support@example.com' style='color: #007BFF;'>contact us</a>.</p>"
+                + "<p style='font-size: 14px; color: #888; text-align: center;'>This email was sent to you because we received a request for a password reset for your account.</p>"
+                + "<p style='font-size: 12px; color: #aaa; text-align: center;'>If you did not request a password reset, please ignore this email.</p>"
+                + "</div>"
+                + "</body></html>";
 
-        String emailMessage = emailContent.toString();
 
-        emailService.sendEmail(user.getEmail(), "Password Reset Request", emailMessage);
+        emailService.sendHtmlEmail(user.getEmail(), "Password Reset Request", htmlContent);
         System.out.println(hashedToken);
         passwordResetTokenRepository.save(passwordResetToken);
         return true;
