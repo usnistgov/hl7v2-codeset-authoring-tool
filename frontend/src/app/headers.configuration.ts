@@ -15,16 +15,16 @@ export const HEADERS: IHeaderMenuOptions = Object.freeze({
       faIcon: 'user',
     },
     {
-      label: 'Codesets',
+      label: 'Code sets',
       routerLink: '/codesets',
       children: [
         {
-          label: 'Create Codeset',
+          label: 'Create Code set',
           routerLink: '/codesets/create',
           faIcon: 'add',
         },
         {
-          label: 'Codesets List',
+          label: 'Code sets List',
           routerLink: '/codesets/list',
           queryParams: { type: 'all' },
         },

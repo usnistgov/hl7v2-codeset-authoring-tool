@@ -49,7 +49,7 @@ import { HEADERS } from './headers.configuration';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'Codesets Authoring Tool';
+  title = 'Code sets Authoring Tool';
   abbrv = 'CAT';
   version = 'v1.0.0';
   menuOptions = HEADERS;

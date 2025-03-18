@@ -60,7 +60,7 @@ export class CodesetVersionEditorComponent extends DamAbstractEditorComponent<IC
   ) {
     super({
       id: EDITOR_ID,
-      title: 'Codeset Version',
+      title: 'Code set Version',
     });
     this.form = signal(undefined);
     this.cols = [];
